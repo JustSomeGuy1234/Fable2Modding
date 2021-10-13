@@ -6,4 +6,5 @@ Compiles and compresses your modified Lua script, then replaces the old version 
 This script (and its requirements) is all you need to begin writing your own code and have it run in-game.
 
 REQUIRES: Offzip.exe (https://aluigi.altervista.org/mytoolz.htm#offzip) 
+
 REQUIRES: LuaC.exe (Try and find it online, or compile the Lua source code).
