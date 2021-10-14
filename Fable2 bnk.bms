@@ -1,0 +1,84 @@
+#By Just Some Guy: https://github.com/JustSomeGuy1234/ 
+#	Alias IDontKnowMuch on Xenhax
+#Feel free to use, learn from, edit and include in your own scripts as long as the script is provided for free and credit is provided
+
+#SPECIAL INFO!
+#This script should extract the files from Fable 2 .bnk files EXCEPT speech.bnk and 1024mip0_textures.bnk which are a special case.
+#I trim the .wav files first 4 bytes so you can just run them through xnaencode once they're extracted. 
+
+
+
+ENDIAN BIG #Everything is in big endian
+
+GET ARCHIVENAME FILENAME #I do this because opening files is a bit weird with assigning files to the array
+OPEN "." ARCHIVENAME 0 #and i don't really know if i have to "open" the file twice
+OPEN 0 #0 is the archive that the user opened
+
+GET BASEOFFSET LONG #Almost every files offset is 0x8000 except from the very big ones
+GET UNKNOWN LONG #Is almost always 3 in every file
+GET NULL BYTE #I do this to adjust the current offset by one byte
+GET HEADZSIZE LONG #The size of the header while compressed
+GET HEADSIZE LONG #The size of the header while decompressed
+SAVEPOS HEADOFFSET #Almost always 0x11 except for big files.
+COMTYPE zlib_noerror #You MUST use noerror otherwise it doesn't decompress due to... something
+GET HEADNAME BASENAME #Set the header name file to this file
+string HEADNAME += "HEADER.dat" #so thisfile.bnk + HEADER.dat
+CLOG HEADNAME HEADOFFSET HEADZSIZE HEADSIZE
+
+
+OPEN "." HEADNAME 1 #Open the header decompressed header file that we just created
+OPEN 1 #And then open it from the array. Once again i'm not confident with knowing how the open function works so i use open twice to make sure
+ENDIAN BIG #Both the header and the archive are big endian thankfully.
+GET FILES LONG 
+
+FOR i = 0 < FILES
+	GET NAMELEN LONG #The filename has an additional 0x00 at the end but that doesn't effect anything.
+
+	GETDSTRING NAME NAMELEN
+	GET OFFSET LONG #I say offset but this is before we add it to the base offset
+	GET SIZE LONG
+	SAVEPOS PRECHECKOFF
+
+	#Ok so this can either be Namelen for the proceeding file, or it's compressed size for the current compressed file.
+	GET COMPSIZE LONG
+
+	#ExtraData is a long that indicates how many 4 byte values proceed it. Eg. 00000002 would have 8 bytes of extra data after it (2 4 byte values). I imagine this is used for decompression, but we'll be fine without it.
+	GET EXTRADATA LONG
+	IF EXTRADATA < 100 #We just hope that there's less than 100 bytes of extra data. The most i've seen is 16 (4 longs).
+		SET ISCOMPRESSED 1
+		PRINT "File has %EXTRADATA% extra longs of data!"
+		FOR i1 = 0 < EXTRADATA
+			GET DUMMY LONG
+			NEXT i1
+		#We should now be at the namelen of the proceeding file
+	ELSE
+		GOTO PRECHECKOFF
+		SET ISCOMPRESSED 0
+	ENDIF
+
+
+	OPEN 0 #Open the archive again so we can extract the files with the offset, filename and file length that we got from the header
+	ENDIAN BIG
+	MATH OFFSET + BASEOFFSET 
+	GOTO OFFSET #Go to the start of the file. I ONLY DO THIS TO DO A CHECK IF IT'S A WAV
+	GET CHECK LONG
+	IF CHECK = 0x786D6100
+		PRINT "I am a wave file but run me through xnaencode to decode me"
+		MATH OFFSET + 4 #Trimming off the first 4 bytes of the file so xnaencode doesn't complain that they're not wav
+		MATH SIZE - 4
+	ENDIF
+	print "OFFSET OF %NAME% IS %OFFSET%, COMPRESSED SIZE IS %COMPSIZE%, SIZE IS %SIZE%"
+	IF ISCOMPRESSED = 1
+		CLOG NAME OFFSET COMPSIZE SIZE
+	ELSE
+		LOG NAME OFFSET SIZE
+	ENDIF
+	OPEN 1
+	ENDIAN BIG
+	NEXT i
+
+#TODO: Look at speech.bnk. It has a single header that is compressed and spread at the end of the file. Looking for 80 00 and 1A 84 should be enough to find all but the last part.
+#	Eh kinda solved. Just used a wav scanner and read the filenames from a csv file. Order of discovery is the same order as the csv.
+#Look at 1024mip0_textures.bnk. It seems that there is either compressed data in there just like speech.bnk with a split header or i've done something wrong. The previous is most likely due to its file size.
+
+#Split header shouldn't be too hard. If we can figure out where the next header is consistently (either an offset, or a consistent interval) then it should be really easy to just run the for loop again.
