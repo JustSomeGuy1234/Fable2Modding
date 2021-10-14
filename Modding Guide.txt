@@ -1,0 +1,73 @@
+Fable 2 has an implementation of Lua 5.1 which it uses to drive several things including AI, UI, Cutscenes, Quests, and debugging.
+We can take advantage of the implementation by modifying pre-existing Lua scripts to run our own code.
+
+A knowledge of Lua is very advantageous, though this game drove me to learn it just so I could mess around.
+Thankfully Lua has very simple syntax and is easy to pick up and use, though things can get pretty confusing the deeper you go (no thanks to the Lua documentation).
+Lua is also used in plenty of other games so if you want an easier way to learn Lua, I'd start with them.
+
+To begin you must understand a couple of things.
+Firstly, all of the Lua files are compiled. This means you can't immediately open 'em up and write your code inside.
+  There is good news about this. There's at least 2 Lua decompilers out there. 
+  The ones I know about are LuaDec (kinda sucks) and unluac which I haven't had a single problem with.
+  I therefor highly recommend downloading unluac to make lua scripts readable and modifyable.
+    (https://sourceforge.net/projects/unluac/)
+    (Requires Java to be installed)
+And secondly, the vast majority of Lua scripts are not loose and are within the .bnk files.
+  A bnk file is a file archive, meaning it's a file that stores files. Think .zip files.
+  This is not really something you have to worry about because there are tools out there (including mine) that manage this hurdle for you, as if the file was just loose.
+
+----------Bnk files----------
+More on bnk files and where the Lua files are:
+  This is somewhat confusing so bear with me.
+  There are 3 banks that we are interested in.
+  These are: gamescripts.bnk, gamescripts_r.bnk, and guiscripts.bnk
+  It is VITAL that you understand the difference between these files.
+
+  gamescripts_r.bnk:
+  The most important bnk for Lua modding.
+  Contains Lua scripts that get run in-game.
+  This is the bnk we want to modify to do... anything.
+  I will refer to this bnk as _r from now on. I assume _r means retail? As in scripts to be used in the final version of the game.
+
+  gamescripts.bnk:
+  Contains the same scripts as _r but these seem to not get run!
+  The scripts within this bnk have *not been stripped of their debug information*.
+    This means that variable names still exist and are much easier to read once decompiled.
+    This bnk essentially contains a more readable version of every script that's within _r.
+   
+   guiscripts.bnk:
+   Contains scripts that manage the UI.
+   These scripts seem to exist within a different Lua state and therefor their values cannot be accessed from _r or startup.
+   
+   startup scripts:
+   There are several loose lua files in the scripts/Startup folder.
+   These seem to be in their own lua state.
+
+An EXTREMELY important thing to know is that modified scripts cannot exceed their original size (post compilation and compression).
+As such, you cannot write code within a script and store it in a bnk without removing snippets of code.
+This is actually not a problem as many scripts contain redundant code and more importantly we can call our own scripts at runtime that are outside of bnks, completely eliminating this issue!
+
+----------Lua states----------
+From my limited understanding, a lua state is pretty much an instance of lua and these Lua instances cannot interact with each other.
+As far as I can tell there are 3 lua states.
+One is in-game, where you're walking around and killing things.
+One is the GUI.
+One is at startup.
+
+The ingame state has all the fun bits that we can mess around with.
+The GUI state is there to run Anark's Gameface system.
+The startup state, as far as I can tell, is used to initialize some things, like mounting bnks. I wish I could elaborate but I haven't looked into it too much.
+
+----------Actually doing stuff!----------
+Alright, so now you understand more about the game's Lua implementation(s?) you can start doing stuff.
+
+First thing you're absolutely going to want to work toward is get your own code loaded from an external lua script.
+Before you do that however, you'll want to actually get your code in the game *to load* your external code.
+To do this, you'll have to modify a script in a lua state's respective bnk that you want your code to run in.
+If you're wanting to do something like toggling the free cam or spawning an enemy or adding gold, you'll want to modify gamescripts_r.bnk.
+
+Slow down! You can't modify a script without the original, otherwise you'd just be removing all the old code which will probably break the game!
+We need to modify right now, not replace entirely.
+
+So how do we get the original? Luckily for you there's tools out there that extract files from bnks, including my own.
+TODO: Write the rest...
