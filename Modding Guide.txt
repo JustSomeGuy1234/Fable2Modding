@@ -1,3 +1,15 @@
+----------Modding?----------
+This is a somewhat indepth guide to modding with Fable 2's Lua system which grants you a whole ton of control over the games scripts.
+
+You can't create new lands, or new models, or new textures with Lua and they need to be reverse engineered too but
+Lua is a vital step towards creating new content like quests, and enemies and... pretty much everything scripted.
+I'm pretty sure just with access to Lua you can create your own quest where you have to kill some bandits or steal someones apple, or survive waves of enemies.
+Within the scripts there's also references to content that was planned in development but didn't make it to the final game. They're a very nice find.
+
+It's also pretty damn fun just to fly around with the freecam and spawn several trolls near some poor villagers.
+  bonus points if you get the leftover Zombiemageddon script working
+
+----------Intro----------
 Fable 2 has an implementation of Lua 5.1 which it uses to drive several things including AI, UI, Cutscenes, Quests, and debugging.
 We can take advantage of the implementation by modifying pre-existing Lua scripts to run our own code.
 
@@ -16,6 +28,7 @@ Firstly, all of the Lua files are compiled. This means you can't immediately ope
 And secondly, the vast majority of Lua scripts are not loose and are within the .bnk files.
   A bnk file is a file archive, meaning it's a file that stores files. Think .zip files.
   There are tools out there (including mine) that manage this for you.
+
 
 ----------Bnk files----------
 More on bnk files and where the Lua files are:
@@ -113,10 +126,11 @@ This is where unluac (or LuaDec if you're a masochist) comes in handy.
 
 Before we begin I'd like to reiterate on the difference between gamescripts and gamescripts_r.
 
-  gamescripts and gamescripts_r scripts are functionally identical, meaning once compiled they will do the exact same as each other.
+  gamescripts scripts and gamescripts_r scripts are functionally identical, meaning their scripts will do the exact same as each other.
     This means you can theoretically put a gamescripts script into gamescripts_r and the game will perform the same.
   gamescripts scripts are NOT run (as far as I know) but they contain debug info.
-  This basically means the decompiled scripts are much easier to read than _r's.
+    This basically means the decompiled scripts are much easier to read than _r's.
+  As far as I know, there is NO reason to modify scripts in gamescripts.bnk because they're not run.
   
   
   gamescripts_r scripts ARE run but their debug info has been stripped, meaning they're harder to read.
@@ -129,36 +143,126 @@ When you pass unluac a compiled script it will automatically output it to the te
 To output it to a file, you'll want to do:
 java -jar unluac.jar "\bnkname\scriptname.lua" >> "scriptname.txt"
 This will write the decompiled script to a file called "scriptname.txt" in the folder that unluac is in. (or the working directory?)
-Do NOT change the output filename from what it was when you extracted it, otherwise CompileCompressReplace will not be able to find it in the bnk when replacing.
-You may change the extension of the decompiled file to whatever you want. E.g You can change it from scriptname.lua to scriptname.txt or anything else.
+Do NOT change the scripts filename from what it was when you extracted it from the bnk, otherwise CompileCompressReplace will not be able to find it in the bnk when replacing.
+You may change the extension of the decompiled file to whatever you want, however. E.g You can change it from scriptname.lua to scriptname.txt or anything else.
 
 Like I said, you can create a batch file instead to automatically do this so you don't have to write that line out into the terminal every time.
+  You'll probably need some basic knowledge of Windows command line to do this.
 Also, be careful if you decompile the same file again. Make sure you delete the old output before decompiling it again otherwise you'll end up with the script repeating in the file.
 
-----------Modifying a Lua Script----------
-So, you've extracted and decompiled a Lua script, you've read it, you've modified it now you need to replace the original in the bnk... 
-TODO: write this bit
+----------Before You Go Modifying a Lua Script in a bnk----------
+As I said earlier, a modified script cannot be bigger than the original.
+The reason for this is that if it is, it will start overwriting the next file in the bnk.
+Imagine the script is a chapter in a book. You can change things in this chapter, but you can't write any more words without writing into the next chapter.
+
+As I also said earlier, there is a solution.
+We can use a function (defined by the game) called RunScript().
+This function basically loads and runs another script of our choosing.
+The great thing about this function is that it can also load external scripts, scripts outside of bnks!
+This means that we can create a brand new script in one of the game's folders and call RunScript on it.
+The game will then load the file and run all the code within it!
+You should know that RunScript will run all code within the external script and *then* continue execution of the current script.
+
+Remember that book analogy?
+Basically, RunScript() is like inserting a footnote but for code.
+
+So, the key to writing additional code within a script is not to. Instead, you should add a call to RunScript() and pass it the path to your external script.
+The code in your external script is basically called as if it is a function, therefor keep in mind local variables will not be accessable from within the external script as the scope will be different.
 
 
-As far as I know, there is NO reason to modify scripts in gamescripts.bnk because they're not run.
+You may be thinking: "How am I meant to insert a call to RunScript if I can't make the script any bigger?!?"
+Well this is an issue that doesn't have a very good solution.
+Basically, you'll need to remove some redundant code, or modify a different script that has redundant code to then call RunScript().
+
+Here's an example.
+GeneralScriptManager.lua is one of the first scripts that gets run when starting a new game.
+It has a couple of redundant lines of code, specifically some calls to print()
+print() has no functional use and does not effect the flow of the game at all, it was just for debugging during development.
+So we can remove the call to print() and this gives us some precious bytes to put our code in.
+We can now write our call to RunScript(), which is all we need to start running our own code on demand.
+
+----I kind of went off the rails here, but i'd highly recommend reading through this as modifying things like quests will probably require it.----
+
+Here's a much more tricky scenario. 
+Say you plan on modifying a quest script or something that you can't modify at runtime (due to the fact that the code you want to modify is in a coroutine).
+You've also got no space to write any code in the lua file except a single call to RunScript(path)
+I'll give you a moment to come up with a solution... Give up? I would too if I were you, took me a few minutes to come up with this.
+
+Solution:
+You can transfer the definition of the coroutine function to your own external script, which you can then modify.
+It's not necessarily that easy however. Here's where that knowledge of Lua comes in handy.
+The external script may not be run in the same environment of the internal script, so any values defined (in this case the coroutine function) may not be defined in the right table.
+For example, 
+-- in the internal script/function:
+sometable.someval = 1
+-- may be equal to this in the external script:
+someothertable.sometable.someval = 1
+
+At this point, RunScript is not enough.
+Let me introduce a native* Lua function called loadfile().
+  *not entirely native as it has been modified by Lionhead to work with the 360's filesystem.
+loadfile() is very easy to use. Just pass it a filepath like RunScript() and it will return a function without calling it.
+
+
+E.g myfunction = loadfile("scripts\myscript")
+We can then simply do:
+myfunction()
+
+Why's this any different? It's not, not yet anyway. There's another step to solving this issue.
+We need to set the environment of the function to the same environment of the original script.
+I won't explain what an environment is, it's kind self explanatory and a full explanation would require an explanation of lua. (contradictory right?)
+
+To truly solve this issue, we'll need to make use of setfenv() and getfenv().
+Here's how i'd do this anyway:
+
+myfunc = loadfile("myscript.txt") -- Load the external script (containing definition of the coroutine function), as a function
+setfenv(myfunc, getfenv(1)) -- Set "external script"'s environment to the same as the internal script. (getfenv(1) returns the environment of the internal script)
+myfunc() -- call the function
+
+
+----------Actually modifying a Lua Script in a bnk----------
+To do this you'll need to use CompileCompressReplace.py
+It's usage is very simple. Pass it:
+The path to your modified uncompiled script,
+The path to the bnk containing the script to replace,
+The path to LuaC.exe
+The path to Offzip.exe
+
+If you get a warning about the new script being bigger than the old script, enter n. Otherwise you will probably break the game.
+You must find a way to shrink the filesize of the script you're modifying (see last chapter).
 
 You should know that when CompileCompressReplace compiles your script, it strips the debug info, essentially turning a non_r script into an _r script. 
-
   So here's what I do:
   To understand what a script does, decompile the gamescripts.bnk version of the script and read it.
   I will then modify it and pass it to CompileCompressReplace.py and replace the script in the gamescripts_r bnk.
     Yep, I decompile a script from non_r, modify it, compile it, and replace _r's version with it.
   This does not cause any issues as CompileCompressReplace automatically strips debug info from the non-r version, making it practically identical aside from any modifications we made.
 Therefor we basically turn a modified non-r script into a modified _r version.
-
 Confused? Don't worry. Basically, decompile and modify non-r scripts then use CompileCompressReplace to put them in the _r bnk so they get run. 
 
-----------
+If you plan on modifying the same script over and over to make tweaks, I would suggest making a batch for this too.
+For example:
+---
+CompressCompileReplace.py ".\somescript.txt" "Xbox360\Fable 2\data\gamescripts_r.bnk" ".\LuaC.exe" ".\Offzip.exe"
+---
+You can also replace ".\somescript.txt" with %1 and pass your plaintext script to the batch, so you can modify a different script within the same bnk.
 
 
-First thing you're absolutely going to want to work toward is get your own code loaded from an external lua script.
-Before you do that however, you'll want to actually get your code in the game *to load* your external code.
-To do this, you'll have to modify a script in a lua state's respective bnk that you want your code to run in.
-If you're wanting to do something like toggling the free cam or spawning an enemy or adding gold, you'll want to modify gamescripts_r.bnk.
 
-TODO: Write the rest...
+----------Got your code running in game?----------
+Cool. Frustrated from having to reload the game for every change you make to your code? Same. Solution? Coming right up.
+
+Ok so restarting the game (a 1 minute long process) to load your code is not ideal, and you can't do things like toggle freecam at will.
+I haven't found an ingame function that we can use to reload our code, and if I had we'd still need to be able to call it when we want to. Catch-22.
+I have come up with a solution though.
+
+Basically, I create a coroutine (with GeneralScriptManager.AddScript(TableContainingUpdateFunction), more on this later).
+This coroutine calls RunScript() on another external script, every 2 seconds. 
+This external script assigns a global variable every time it's run that I call checksum. I have direct access to this external script through my text editor.
+The coroutine checks if this checksum (int) ever changes. If it does, it will call a specific function that is also being defined by the external script.
+So, if I want my code to be run I just change the checksum int and save the file, the coroutine sees this, and it will call a certain function within the external script (which I can change while the game is running).
+
+It's a pretty rudimentary system but it works.
+
+
+
