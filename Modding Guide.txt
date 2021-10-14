@@ -4,6 +4,7 @@ We can take advantage of the implementation by modifying pre-existing Lua script
 A knowledge of Lua is very advantageous, though this game drove me to learn it just so I could mess around.
 Thankfully Lua has very simple syntax and is easy to pick up and use, though things can get pretty confusing the deeper you go (no thanks to the Lua documentation).
 Lua is also used in plenty of other games so if you want an easier way to learn Lua, I'd start with them.
+The more you understand about computers the better. I'm not good at explaining things, so this will most likely be confusing. My apologies.
 
 To begin you must understand a couple of things.
 Firstly, all of the Lua files are compiled. This means you can't immediately open 'em up and write your code inside.
@@ -14,7 +15,7 @@ Firstly, all of the Lua files are compiled. This means you can't immediately ope
     (Requires Java to be installed)
 And secondly, the vast majority of Lua scripts are not loose and are within the .bnk files.
   A bnk file is a file archive, meaning it's a file that stores files. Think .zip files.
-  This is not really something you have to worry about because there are tools out there (including mine) that manage this hurdle for you, as if the file was just loose.
+  There are tools out there (including mine) that manage this for you.
 
 ----------Bnk files----------
 More on bnk files and where the Lua files are:
@@ -34,6 +35,7 @@ More on bnk files and where the Lua files are:
   The scripts within this bnk have *not been stripped of their debug information*.
     This means that variable names still exist and are much easier to read once decompiled.
     This bnk essentially contains a more readable version of every script that's within _r.
+  I will occasionally refer to this bnk as non_r
    
    guiscripts.bnk:
    Contains scripts that manage the UI.
@@ -59,15 +61,104 @@ The GUI state is there to run Anark's Gameface system.
 The startup state, as far as I can tell, is used to initialize some things, like mounting bnks. I wish I could elaborate but I haven't looked into it too much.
 
 ----------Actually doing stuff!----------
-Alright, so now you understand more about the game's Lua implementation(s?) you can start doing stuff.
+Alright, so now you understand more about the game's Lua implementation(s?) you can set some things up.
+
+You're going to need:
+Something to extract bnks. There's a few tools out there.
+  I wrote my own script for software called QuickBMS. The bms script is in this repository.
+  Requires QuickBMS - http://aluigi.altervista.org/quickbms.htm
+CompileCompressReplace.py (My tool to automatically reimport your modded script into a bnk) - Found in this Github repository
+unluac (for decompiling scripts) - https://sourceforge.net/projects/unluac/
+LuaC (for compiling the modified script), - Find it online, or compile the Lua source code.
+Offzip (CompileCompressReplace requires this) - https://aluigi.altervista.org/mytoolz.htm#offzip
+
+You'll want to create a folder dedicated to modding the Lua files that you can put your tools in (unluac, CompileCompressReplace, something for extracting from bnks).
+  Don't put this folder inside of the game files, it's just a folder to work within.
+  I will call this folder "Fable 2 Lua"
+Within this folder I recommend creating 3 more folders called gamescripts, gamescripts_r, and guiscripts.
+  These folders will contain the extracted scripts from the bnks.
+
+----------Extracting the Lua files----------
+Firstly you're going to want to extract all of the Lua files from the 3 bnks (gamescripts, _r, and guiscripts).
+  You can skip guiscripts if you want, guiscripts doesn't control anything asides from the GUI, surprisingly.
+  
+I'm going to assume you're using my QuickBMS script for extraction. 
+  If not, use whatever tool you're using to extract lua files from each bnk and put them in their respective folder, preferably keeping the file hierarchy.
+  Skip to the next chapter.
+
+To use my QuickBMS script you'll need to copy each bnk file to their new respective folders. 
+  E.g Copy gamescripts.bnk into your new folder called \Fable 2 Lua\gamescripts\
+  If you do not do this and select the original bnk, you will get an io error about being unable to find a file. 
+
+For this example I'll assume you're going to start with gamescripts.bnk:
+Run QuickBMS and select my script, then select the copy of gamescripts.bnk (in \Fable 2 Lua\gamescripts\), then select it again.
+When you do this, a new file and folder will appear.
+The file will be called *bnkname*_HEADER. Delete this.
+The new folder will be called "scripts". The extracted (but still compiled) Lua scripts will be in here.
+Now that the scripts have been extracted you can delete the copy of the bnk.
+
+  Repeat for each script bnk.
+
+At the end of this process, you should have a file hierarchy of 
+\Fable 2 Lua\gamescripts\scripts\
+\Fable 2 Lua\gamescripts_r\scripts\
+\Fable 2 Lua\guiscripts\scripts\ (if you extracted guiscripts)
+
+These scripts folders should contain more folders and scripts.
+
+----------Decompiling the extracted Lua scripts----------
+Now you have most of the game's Lua files but they're not readable!
+That's because they're compiled, and must be decompiled into plaintext.
+This is where unluac (or LuaDec if you're a masochist) comes in handy.
+
+Before we begin I'd like to reiterate on the difference between gamescripts and gamescripts_r.
+
+  gamescripts and gamescripts_r scripts are functionally identical, meaning once compiled they will do the exact same as each other.
+    This means you can theoretically put a gamescripts script into gamescripts_r and the game will perform the same.
+  gamescripts scripts are NOT run (as far as I know) but they contain debug info.
+  This basically means the decompiled scripts are much easier to read than _r's.
+  
+  
+  gamescripts_r scripts ARE run but their debug info has been stripped, meaning they're harder to read.
+  This also means _r scripts are also smaller in filesize.
+
+----------unluac Usage
+(Requires Java. Recommend having Java in the path variable in Windows, otherwise you'll have to specify where Java is every time)
+To use unluac you'll have to either use cmd/powershell or create a batch file to automatically process any compiled lua script you pass it.
+When you pass unluac a compiled script it will automatically output it to the terminal. This is okay for reading it but not for modifying it.
+To output it to a file, you'll want to do:
+java -jar unluac.jar "\bnkname\scriptname.lua" >> "scriptname.txt"
+This will write the decompiled script to a file called "scriptname.txt" in the folder that unluac is in. (or the working directory?)
+Do NOT change the output filename from what it was when you extracted it, otherwise CompileCompressReplace will not be able to find it in the bnk when replacing.
+You may change the extension of the decompiled file to whatever you want. E.g You can change it from scriptname.lua to scriptname.txt or anything else.
+
+Like I said, you can create a batch file instead to automatically do this so you don't have to write that line out into the terminal every time.
+Also, be careful if you decompile the same file again. Make sure you delete the old output before decompiling it again otherwise you'll end up with the script repeating in the file.
+
+----------Modifying a Lua Script----------
+So, you've extracted and decompiled a Lua script, you've read it, you've modified it now you need to replace the original in the bnk... 
+TODO: write this bit
+
+
+As far as I know, there is NO reason to modify scripts in gamescripts.bnk because they're not run.
+
+You should know that when CompileCompressReplace compiles your script, it strips the debug info, essentially turning a non_r script into an _r script. 
+
+  So here's what I do:
+  To understand what a script does, decompile the gamescripts.bnk version of the script and read it.
+  I will then modify it and pass it to CompileCompressReplace.py and replace the script in the gamescripts_r bnk.
+    Yep, I decompile a script from non_r, modify it, compile it, and replace _r's version with it.
+  This does not cause any issues as CompileCompressReplace automatically strips debug info from the non-r version, making it practically identical aside from any modifications we made.
+Therefor we basically turn a modified non-r script into a modified _r version.
+
+Confused? Don't worry. Basically, decompile and modify non-r scripts then use CompileCompressReplace to put them in the _r bnk so they get run. 
+
+----------
+
 
 First thing you're absolutely going to want to work toward is get your own code loaded from an external lua script.
 Before you do that however, you'll want to actually get your code in the game *to load* your external code.
 To do this, you'll have to modify a script in a lua state's respective bnk that you want your code to run in.
 If you're wanting to do something like toggling the free cam or spawning an enemy or adding gold, you'll want to modify gamescripts_r.bnk.
 
-Slow down! You can't modify a script without the original, otherwise you'd just be removing all the old code which will probably break the game!
-We need to modify right now, not replace entirely.
-
-So how do we get the original? Luckily for you there's tools out there that extract files from bnks, including my own.
 TODO: Write the rest...
