@@ -169,6 +169,20 @@ Like I said, you can create a batch file instead to automatically do this so you
   You'll probably need some basic knowledge of Windows command line to do this.
 Also, be careful if you decompile the same file again. Make sure you delete the old output before decompiling it again otherwise you'll end up with the script repeating in the file.
 
+----------Which script should I modify first?----------
+There is no specific file you have to modify to use loadfile() or RunScript() to start running external code.
+If you want your code to only be run once, check generalsetupscript.lua. This script contains the initialization of many other scripts.
+As far as I know, the Lua files specified in this script are only RunScript'd once, meaning anything within a specified script is run once.
+
+I personally started with WeaponInventory.lua as it's loaded second-to-last(so it has the most access, though creating a coroutine and waiting a tick will make this a non-issue) 
+and it also contains many relatively useless functions which can be stripped of their functionality, meaning you have as much space as you need to write what you want.
+(though RunScript/loadfile also make this a non-issue)
+
+So basically it doesn't really matter as long as you choose a script that gets run once, that you can call RunScript() in.
+
+Of course if you want to modify a script to modify functionality and not just as an injection point for your code it's up to you.
+If you plan on modifying a quest or quest AI, read on. It's not quite as simple as just modifying a script and replacing the old version in a bnk.
+
 ----------Before You Go Modifying a Lua Script in a bnk----------
 As I said earlier, a modified script cannot be bigger than the original.
 The reason for this is that if it is, it will start overwriting the next file in the bnk.
@@ -404,6 +418,26 @@ end
 Pass the above function a table and the game will show 12 keys of a table at a time. Warning, there can be tens of pages of keys in a table.
 Pass it a table and true, and it will display all values instead of keys. (not very useful imo)
 Replace the calls to DisplayMessageBox with print() and the script can be used in a normal Lua interpreter, though at that point you'll probably want to use io.
+
+----------Saving----------
+I've barely messed around with loading a saved game, but things aren't too simple. (They aren't too complex either it seems.)
+Upon loading a saved game, it seems that lua scripts in bnks are not run. As in, GeneralSetupScript.lua does not run and it will not call the scripts within.
+
+This is because the game effectively saves part of a Lua state by using Pluto (https://github.com/hoelzro/pluto) when you quit the game.
+Look into the saveloadsystem.lua script, and generalscriptmanager.lua to understand what's going on.
+Basically, when you save the game all coroutines within GeneralScriptManager (and a few other tables including quests)
+are added to a "Permanents table" which is written to a file. 
+When loading saved game, all tables/values within the permanents table are restored, including active coroutines.
+
+You can seemingly add your own "things" to the permanent table with AddToPermanentsTables(thing_to_add, string_key), 
+where thing_to_add can be a function, and string_key is a unique name (naming convention seems to be "Lua_tablename.function").
+You can also pass this function a table but it does not seem to save tables within the table.
+AddToPermanentsTable does not seem to store functions either but there's a function for that too, called AddFunctionsInTableToPermanentsTables(table, string_key).
+	Please see QuestManager.AddQuestToPermanentsTable (in questmanager.lua) for more.
+
+If you just want something simple to be saved, like a coroutine that runs your external script,
+then create a coroutine through GeneralScriptManager.AddScript() as this should make the coroutine persistant.
+
 
 ----------Ending----------
 Well that's kind of it. I hope this wasn't too confusing.
