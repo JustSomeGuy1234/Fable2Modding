@@ -1,14 +1,17 @@
 ----------Modding?----------
 This is a somewhat indepth guide to modding with Fable 2's Lua system which grants you a whole ton of control over the games scripts.
+(Written by Just Some Guy#8131, owner of this repository)
 
-You can't create new lands, or new models, or new textures with Lua and they need to be reverse engineered too but
-Lua is a vital step towards creating new content like quests, and enemies and... pretty much everything scripted.
+You can't create new lands, or new models, or new textures with Lua and they need to be reverse engineered too, but
+understanding the Lua scripts is a vital step towards creating new content like quests, and enemies and... pretty much everything scripted.
 I'm pretty sure just with access to Lua you can create your own quest where you have to kill some bandits or steal someones apple, or survive waves of enemies.
-Within the scripts there's also references to content that was planned in development but didn't make it to the final game. They're a very nice find.
+Within the scripts there's also plenty of references to content that was planned in development but didn't make it to the final game. They're a very nice find.
 
 It's also pretty damn fun just to fly around with the freecam and spawn several trolls near some poor villagers.
   bonus points if you get the leftover Zombiemageddon script working
-
+  
+  
+  
 ----------Intro----------
 Fable 2 has an implementation of Lua 5.1 which it uses to drive several things including AI, UI, Cutscenes, Quests, and debugging.
 We can take advantage of the implementation by modifying pre-existing Lua scripts to run our own code.
@@ -28,6 +31,19 @@ Firstly, all of the Lua files are compiled. This means you can't immediately ope
 And secondly, the vast majority of Lua scripts are not loose and are within the .bnk files.
   A bnk file is a file archive, meaning it's a file that stores files. Think .zip files.
   There are tools out there (including mine) that manage this for you.
+  
+----------Platforms----------
+Disclaimer: I haven't actually messed around with this stuff on a real modded 360 yet, though I do have one collecting dust. The following should all apply.
+
+To begin modding Fable 2 you will NEED either the Xenia emulator, or a modded Xbox 360 that is preferably connected to your PC through Xbox Neighborhood.
+You will also need a dumped copy of Fable 2. This will have to be legally obtained from your modded 360.
+
+If you are using Xenia, transfer the game to your PC.
+If you're using a modded 360, dump the game to the 360's storage so it is accessable from your PC.
+  You will probably be transferring files over to it a lot so FTP or neighborhood is a must-have 
+  unless you plan on transfering your scripts over through USB every time you make a single change.
+
+I actually recommend beginning with Xenia, because while it's not perfectly emulated, it's extremely convenient to work with the Windows filesystem.
 
 
 ----------Bnk files----------
@@ -167,29 +183,30 @@ Remember that book analogy?
 Basically, RunScript() is like inserting a footnote but for code.
 
 So, the key to writing additional code within a script is not to. Instead, you should add a call to RunScript() and pass it the path to your external script.
-The code in your external script is basically called as if it is a function, therefor keep in mind local variables will not be accessable from within the external script as the scope will be different.
+The code in your external script is basically called as if it is a big function (which can create new functions, variables, and tables).
+  Therefor local variables will not be accessable from within the external script as the scope will be different.
 
 
 You may be thinking: "How am I meant to insert a call to RunScript if I can't make the script any bigger?!?"
-Well this is an issue that doesn't have a very good solution.
-Basically, you'll need to remove some redundant code, or modify a different script that has redundant code to then call RunScript().
+Basically, you'll need to remove some redundant code (like calls to print()) or 
+transfer the definition of a function/table into your external script while ensuring it will be assigned in the right environment.
 
 Here's an example.
 GeneralScriptManager.lua is one of the first scripts that gets run when starting a new game.
 It has a couple of redundant lines of code, specifically some calls to print()
 print() has no functional use and does not effect the flow of the game at all, it was just for debugging during development.
-So we can remove the call to print() and this gives us some precious bytes to put our code in.
+So we can remove the calls to print() and this gives us some precious bytes to put our call to RunScript() in.
 We can now write our call to RunScript(), which is all we need to start running our own code on demand.
 
-----I kind of went off the rails here, but i'd highly recommend reading through this as modifying things like quests will probably require it.----
+----I kind of went off the rails here, but i'd highly recommend reading through this as modifying things like quests will require the knowledge.----
 
-Here's a much more tricky scenario. 
+Here's a much more tricky scenario that you will most likely come across.
 Say you plan on modifying a quest script or something that you can't modify at runtime (due to the fact that the code you want to modify is in a coroutine).
-You've also got no space to write any code in the lua file except a single call to RunScript(path)
+You've also got no space to write any additional code in the lua file at all, as all the code in the script is essential.
 I'll give you a moment to come up with a solution... Give up? I would too if I were you, took me a few minutes to come up with this.
 
 Solution:
-You can transfer the definition of the coroutine function to your own external script, which you can then modify.
+You can transfer the definition of the function/table to your own external script, which you can then modify.
 It's not necessarily that easy however. Here's where that knowledge of Lua comes in handy.
 The external script may not be run in the same environment of the internal script, so any values defined (in this case the coroutine function) may not be defined in the right table.
 For example, 
@@ -201,23 +218,29 @@ someothertable.sometable.someval = 1
 At this point, RunScript is not enough.
 Let me introduce a native* Lua function called loadfile().
   *not entirely native as it has been modified by Lionhead to work with the 360's filesystem.
-loadfile() is very easy to use. Just pass it a filepath like RunScript() and it will return a function without calling it.
-
+loadfile() is very easy to use. Just pass it a filepath like RunScript() and it will return a function without calling it 
+  (it's important to not immediately call it, as you will see).
 
 E.g myfunction = loadfile("scripts\myscript")
 We can then simply do:
 myfunction()
 
-Why's this any different? It's not, not yet anyway. There's another step to solving this issue.
+Why's this any different to a simple RunScript() call? It's not, not yet anyway. There's another step to solving this issue.
 We need to set the environment of the function to the same environment of the original script.
 I won't explain what an environment is, it's kind self explanatory and a full explanation would require an explanation of lua. (contradictory right?)
 
 To truly solve this issue, we'll need to make use of setfenv() and getfenv().
 Here's how i'd do this anyway:
 
-myfunc = loadfile("myscript.txt") -- Load the external script (containing definition of the coroutine function), as a function
-setfenv(myfunc, getfenv(1)) -- Set "external script"'s environment to the same as the internal script. (getfenv(1) returns the environment of the internal script)
+myfunc = loadfile("myscript.txt") -- Load the external script (containing definition of the transferred function/table), as a function
+setfenv(myfunc, getfenv(1)) -- Set "external script"'s environment to the same as the internal script. (getfenv(1) returns the environment of the internal script in this case)
 myfunc() -- call the function
+
+In short, code run with RunScript("pathtoscript") will be ran in the global environment, which may not be the environment of the internal script, as is the case for quests.
+So we use loadfile("pathtoscript") to load our entire script into a function, then set its environment (with setfenv) to the environment of the internal script (with getfenv).
+This way any code in the external script will be run in the internal script's environment.
+
+Got it? I hope so. If not, you need to learn more about Lua which is not what this guide is for.
 
 
 ----------Actually modifying a Lua Script in a bnk----------
@@ -228,17 +251,18 @@ The path to the bnk containing the script to replace,
 The path to LuaC.exe
 The path to Offzip.exe
 
-If you get a warning about the new script being bigger than the old script, enter n. Otherwise you will probably break the game.
+If you get a warning about the new script being bigger than the old script, enter n. 
+  Otherwise you will probably break the game by overwriting the beginning of the proceeding script in the bnk.
 You must find a way to shrink the filesize of the script you're modifying (see last chapter).
 
 You should know that when CompileCompressReplace compiles your script, it strips the debug info, essentially turning a non_r script into an _r script. 
-  So here's what I do:
+So here's what I do:
   To understand what a script does, decompile the gamescripts.bnk version of the script and read it.
   I will then modify it and pass it to CompileCompressReplace.py and replace the script in the gamescripts_r bnk.
     Yep, I decompile a script from non_r, modify it, compile it, and replace _r's version with it.
-  This does not cause any issues as CompileCompressReplace automatically strips debug info from the non-r version, making it practically identical aside from any modifications we made.
+  This does not cause any issues as the scripts in both banks are identical in functionality.
 Therefor we basically turn a modified non-r script into a modified _r version.
-Confused? Don't worry. Basically, decompile and modify non-r scripts then use CompileCompressReplace to put them in the _r bnk so they get run. 
+Confused? Don't worry. Basically, decompile and modify non-r scripts then use CompileCompressReplace to replace them in the _r bnk so they get run. 
 
 If you plan on modifying the same script over and over to make tweaks, I would suggest making a batch for this too.
 For example:
@@ -247,22 +271,140 @@ CompressCompileReplace.py ".\somescript.txt" "Xbox360\Fable 2\data\gamescripts_r
 ---
 You can also replace ".\somescript.txt" with %1 and pass your plaintext script to the batch, so you can modify a different script within the same bnk.
 
+----------Using RunScript() and loadfile()----------
+One very simple thing I have yet to mention is the directory that these funcs use.
+Both functions paths start in the \Data\ folder.
+Therefor to Run/Load an external script within the \data\scripts folder you can do:
+RunScript("scripts\\myscript.txt") -- Take note of the double backslash, the first one is used as an escape character.
 
+If you're struggling to write a call to RunScript or loadfile due to space you can put your script directly into the data folder and name the script a single character like so:
+RunScript("a") -- Will run a script with the file name of "a" within the \data\ folder. 
+This external script called "a" does not require a .lua or .txt file extension, in fact it does not require a file extension at all.
+
+Also, external scripts are not required to be pre-compiled. They can be plaintext as RunScript/loadfile automatically compiles them into chunks.
+
+Another thing to know is that RunScript and loadfile do not return or cause errors. 
+Instead, if they do not find the file they will return a string with the contents of whatever you pass it... for some reason.
+If you want to do error checking you can do:
+-----
+if type(RunScript("scripts\\somescript")) == "string" then
+  -- Script was not found, or failed to be compiled or something
+  blah blah blah
+end
+-----
 
 ----------Got your code running in game?----------
 Cool. Frustrated from having to reload the game for every change you make to your code? Same. Solution? Coming right up.
 
 Ok so restarting the game (a 1 minute long process) to load your code is not ideal, and you can't do things like toggle freecam at will.
-I haven't found an ingame function that we can use to reload our code, and if I had we'd still need to be able to call it when we want to. Catch-22.
-I have come up with a solution though.
+I have come up with a solution for this.
 
 Basically, I create a coroutine (with GeneralScriptManager.AddScript(TableContainingUpdateFunction), more on this later).
 This coroutine calls RunScript() on another external script, every 2 seconds. 
 This external script assigns a global variable every time it's run that I call checksum. I have direct access to this external script through my text editor.
 The coroutine checks if this checksum (int) ever changes. If it does, it will call a specific function that is also being defined by the external script.
 So, if I want my code to be run I just change the checksum int and save the file, the coroutine sees this, and it will call a certain function within the external script (which I can change while the game is running).
-
 It's a pretty rudimentary system but it works.
 
+Didn't explain it well enough? Here's the coroutine in an external script I name c.lua.
+This script is RunScript()'d by a modified internal script once.
 
+---------------------------------------------------
+if myTestTable ~= nil then
+  GUI.DisplayMessageBox("Not the first time c.lua has run!")
+end
+myTestTable = {}
+myTestTable.curChecksum = 0
+myTestTable.newChecksum = 0
+myTestTable.Update = function()
+  myTestTable.tickCounter = 0
+  GUI.DisplayMessageBox("c initialized")
+  myTestTable.lastResult = false
+  myTestTable.lastReason = ""
+  myTestTable.logString = ""
+  while true do
+    while true do
+      Debug.Draw3DText(Debug.GetHero():GetPosition() + CVector3(0, -2, 2), myTestTable.logString)
+      myTestTable.tickCounter = myTestTable.tickCounter + 1
+      -- If a couple of seconds have passed, reset counter and run ext. script
+      if myTestTable.tickCounter > 32 then
+        myTestTable.tickCounter = 0
+        RunScript("myscripts/test.lua") -- Keep in mind that while the entire script is run, not all the code is called
+                                        -- as some of it is in a function that is not called until the checksum (which I have control external over) has changed.
+        if myTestTable.curChecksum ~= myTestTable.newChecksum then
+          myTestTable.curChecksum = myTestTable.newChecksum
+          myTestTable.lastResult, myTestTable.lastReason = pcall(myTestTable.CodeToRun) -- Note the pcall. If our external script causes an error it will kill this coroutine.
+          myTestTable.logString = tostring(myTestTable.lastResult) .. "\n" .. tostring(myTestTable.lastReason)
+        end
+      end
+      coroutine.yield()
+    end
+  end
+end
+-- GeneralScriptManager.AddScript() creates a coroutine from the Update function within a given table, and coroutine.resume()'s it every game tick.
+GeneralScriptManager.AddScript(myTestTable) 
+---------------------------------------------------
 
+----------I can write code but what can I access?----------
+I have a huge list of all of the interesting tables and functions I've found. [Insert pastebin link]
+Here's a couple of interesting ones.
+GUI.ShowMessageBox("") -- will pop up a menu and displays the string passed. This is pretty useful to display things and I use it in place of print().
+Debug.ToggleFreeCam() -- Toggles freecam.
+
+If you want to find functions and tables for yourself, here's a function I created that displays all keys in a table.
+
+---------------------------------------------------
+myTestTable = {}
+myTestTable.DisplayAllKeys = function(someTable, val) -- table to print, bool for whether to print key or values. Intended to print keys.
+	local howManyKeys = 0
+	myTestTable.tmpstr = ""
+	for k,v in pairs(someTable) do
+		local resultStr = ""
+		if val then
+			resultStr = tostring(v)
+		else
+			resultStr = tostring(k)
+		end
+		myTestTable.tmpstr = myTestTable.tmpstr .. "\n" .. resultStr
+		howManyKeys = howManyKeys+1
+	end
+	if howManyKeys < 1 then
+		GUI.DisplayMessageBox("Table had no keys!")
+		return
+	end
+	
+	-- Add all keys to a string, seperated by new lines
+	myTestTable.strTable = {}
+
+	for s in myTestTable.tmpstr:gmatch("[^\r\n]+") do
+    	table.insert(myTestTable.strTable, s)
+	end
+	
+	-- Print 12 lines of a table's keys at a time
+	myTestTable.strBundle = ""
+	myI = 0
+	for i = 1, #myTestTable.strTable do
+		myI = i
+		if i % 12 == 0 then
+			GUI.DisplayMessageBox(myTestTable.strBundle .. "\nPage " .. tostring(i/12) .. " of " .. tostring(#myTestTable.strTable/12))
+			myTestTable.strBundle = ""
+		end
+		myTestTable.strBundle = myTestTable.strBundle .. tostring(myTestTable.strTable[i]) .. "\n"
+	end
+	if myI % 12 ~= 0 then
+		GUI.DisplayMessageBox(myTestTable.strBundle)
+		myTestTable.strBundle = ""
+		myI = 0
+	end
+end
+---------------------------------------------------
+Pass the above function a table and the game will show 12 keys of a table at a time. Warning, there can be tens of pages of keys in a table.
+Pass it a table and true, and it will display all values instead of keys. (not very useful imo)
+Replace the calls to DisplayMessageBox with print() and the script can be used in a normal Lua interpreter, though at that point you'll probably want to use io.
+
+----------Ending----------
+Well that's kind of it. I hope this wasn't too confusing.
+I could probably go on for several more hours about this stuff, like how the quest system works, but this is hopefully enough to get you started.
+(The questmanager creates a new table for each quest/quest entity and uses metatables and the __index metamethod to make a new instance)
+Anywho... contact me on Discord (tag is at the start of the guide) if you need assistance,
+though I may not help if you're asking like a year after I wrote this guide. (feel free to ask though :p)
