@@ -15,6 +15,8 @@ It's also pretty damn fun just to fly around with the freecam and spawn several 
 ----------Intro----------
 Fable 2 has an implementation of Lua 5.1 which it uses to drive several things including AI, UI, Cutscenes, Quests, and debugging.
 We can take advantage of the implementation by modifying pre-existing Lua scripts to run our own code.
+Here's a link to a developer's slideshow entirely about the game's Lua system.
+https://ubm-twvideo01.s3.amazonaws.com/o1/vault/gdc10/slides/Shaw_Johnathan_LuaScripting_LuaInFableII.pdf
 
 A knowledge of Lua is very advantageous, though this game drove me to learn it just so I could mess around.
 Thankfully Lua has very simple syntax and is easy to pick up and use, though things can get pretty confusing the deeper you go (no thanks to the Lua documentation).
