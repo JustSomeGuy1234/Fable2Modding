@@ -346,7 +346,7 @@ GeneralScriptManager.AddScript(myTestTable)
 ---------------------------------------------------
 
 ----------I can write code but what can I access?----------
-I have a huge list of all of the interesting tables and functions I've found. [Insert pastebin link]
+I have a huge list of all of the interesting tables and functions I've found. You can find it in this repository, though here's a link for the lazy: https://github.com/JustSomeGuy1234/Fable2Modding/blob/main/Functions%20and%20Tables%20I%20found.txt
 Here's a couple of interesting ones.
 GUI.ShowMessageBox("") -- will pop up a menu and displays the string passed. This is pretty useful to display things and I use it in place of print().
 Debug.ToggleFreeCam() -- Toggles freecam.
