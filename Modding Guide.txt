@@ -435,8 +435,9 @@ You can also pass this function a table but it does not seem to save tables with
 AddToPermanentsTable does not seem to store functions either but there's a function for that too, called AddFunctionsInTableToPermanentsTables(table, string_key).
 	Please see QuestManager.AddQuestToPermanentsTable (in questmanager.lua) for more.
 
-If you just want something simple to be saved, like a coroutine that runs your external script,
-then create a coroutine through GeneralScriptManager.AddScript() as this should make the coroutine persistant.
+In theory if you just want something simple to be saved, like a coroutine that runs your external script,
+then create a coroutine through GeneralScriptManager.AddScript() as this should make the coroutine persistant though this may not work (testing shows it doesn't) :(.
+As I've said I've barely messed around with this stuff.
 
 
 ----------Ending----------
