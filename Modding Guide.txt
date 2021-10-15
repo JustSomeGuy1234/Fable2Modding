@@ -47,6 +47,9 @@ I actually recommend beginning with Xenia, because while it's not perfectly emul
 
 
 ----------Bnk files----------
+Back the following files up. Seriously. If you make a mistake (which you probably will while learning) you'll NEED to restore the originals.
+In fact, I wrote a small 2 line batch to restore the original bnks so if I make a mistake wanted to revert changes, which I did a lot, I could fix it in a double click.
+
 More on bnk files and where the Lua files are:
   This is somewhat confusing so bear with me.
   There are 3 banks that we are interested in.
