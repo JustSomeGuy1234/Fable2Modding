@@ -1,0 +1,624 @@
+-- List of Fable 2 Lua table/functions compiled by Just Some Guy - https://github.com/JustSomeGuy1234/
+-- This is NOT every single function/table, only the ones that I found interesting out of those that I found.
+-- "TableName." means it's a table. If there's no . after a line it means it's most very likely a function.
+
+-- I do not know what every single one of these functions do, though the majority of them are self explanatory such as Debug.ToggleFreeCam()
+-- If you find a function and you don't know how to use it or what it does, try and find it within one of the game's Lua scripts. 
+-- It may not necessarily be used by anything, in which case you'll have to blindly figure it out which may involve a LOT of trial and error and crashing.
+
+-- Once again, this is by no means a complete list and I've left out many many functions that I have no interest in, or I left out due to ignorance, or I simply didn't find them.
+-- I hand typed all of these because the game has been stripped of it's io table, which is not surprising because it's a game on the Xbox 360.
+-- There very well may be errors.
+
+-- To find functions/tables on your own, you can pass GUI.DisplayMessageBox() the first few tostring()'d results of pairs() that has been passed table.
+-- Check the guide for a function I wrote that converts every key in a table to a string and displays them on screen, 12 keys at a time. It's what I used to find this stuff.
+
+Debug.
+ToggleFreeCam
+SetDrawDebugPage
+SetDebugMenuRequiresRightStickClick
+SetConsoleScale
+ScriptDebugHelpOff
+ProfileEngine
+ShowAssertScreen
+SetDrawVaultlineDebug -- Works and it's cool, though a bit jank. It must be updated every tick instead of frame. 
+ToggleDebugExpressionEffects
+IsAnyLevelLoaded
+PlayerDebugPage -- Doesn't seem to work.
+CommunityTestLevel
+CommunityTestTable
+UseTestingCommunityData
+GetPhotomodeOnBackButton -- While it does set it, it doesn't do anything it seems.
+SetPhotomodeOnBackButton
+SetDrawBoundingBoxes -- Doesn't seem to work
+SetDrawMilestoneVersionText -- Works but seems useless
+SetDrawBuildVersion -- Nope
+ScriptDebugHelpOn
+GetMemoryUse -- Works, I think it returns it in bytes.
+PrintMemoryStats
+SetMinimapEnabled
+QuitToFrontEnd -- Quits to main menu
+PrintFrustrumClippingStats
+SetDrawDogDebug
+LandOfTheDead -- Spooky halloween time.
+SetConsoleOffsetY
+SetConsoleOffsetX
+TrackDog
+TeleportDogToHero
+SetEnableEntityDrawDebugInfo
+SetDrawCombatDebug -- Works, very cool.
+ApplyProfilingSettings -- Breaks things badly.
+ForceLowLoDLevel -- nope, requires EngineConfig
+SetDrawLocoDebug -- Very cool, shows NPC paths, route & entity to follow
+SetSharedScreenModeToggle -- Spawns henchman, p1 controls both. Rather cool.
+ExecuteMagicTest
+SetDrawGUIScreenNamesAndStates
+SetTextSpeechDebugMenuFilter
+SetDrawNavGraph  -- Shows... nav stuff, not too interesting however. Maybe it shows preferred paths?
+SetDrawNavPaths -- ^
+SetDrawNavLines -- ^
+SetDrawGameFPS -- Doesn't seem to work
+LoadControlSystem
+SetDebugRightShoulderExpression -- Nothing
+SetDrawCombatTargetingDebug
+AddConsoleKeyShortcut
+FlushMeshes
+AddDamoclesSwordsShieldToEntity -- doesn't seem to do anything
+SetShowSpellCastDebugText
+SetUsePhysics
+Whore -- table
+SetDrawEntityBoundingSpheres -- doesn't work
+SetDrawBehaviourNames -- relatively boring
+SetOverheadNarratorDrawn -- ?
+ReloadShaderBank -- something i don't care about
+
+SetPlayerSecondsPerSecond -- Literally speeds the game up. Don't go too fast.
+SetStrafeDebugDraw
+SetDrawCombatMulitplier -- nope
+ForceQuit
+Crash
+StartLoggingShadersInUse
+
+Player. -- IF NOT PASSED PROPER ARGS (GetPlayerHero() is mostly the first required arg) THEN THEY CRASH THE GAME.
+GetHenchmanLookAtButtonDown -- untested. May work on main hero.
+GetLookAtButtonDown -- Gets if holding LT. GREAT FOR INPUT
+IsInFirstPerson -- Gets whether holding LB, very cool!
+SetMapScreenAsEnabled -- GetPlayerHero(), true
+SetInventoryScreenAsEnabled -- ^ i think
+SetPauseMenuInfoPageAsEnabled -- ^ 
+SetSheatingUnsheathingEnabled  -- ^
+SetOverrideCameraMode
+SetWearingCondom
+StartInteractionMode -- Freezes player input and disables main pause menu. Probably used for cutscenes.
+IsLookingDuringInteractionMode -- Not sure. Tried LB and LT, returned false either way.
+StopInteractionMode
+DisableFullPauseMenu -- When pressing the start button, instead of opening main pause screen, only shows "Game Paused" popup. Note it's different from cutscene pause as they say "Scene Paused".
+ReEnableFullPauseMenu -- Seems to not work...
+EnterDivingMode -- If called on land, character jerks forward an inch.
+IsInDarkArea -- Should be self explanatory but I can't tell how dark it has to be, or if certain maps count as dark.
+HasPlayerMode
+
+GUI.PlayLocalisedMovieWithGenderedVoice("NewBeginnings.bik") -- Plays the bik file, pretty simple.
+
+misc
+SoundTools.SetMusicAndAtmosToStartOnNextLevelLoad(false)
+Gameflow.ChildhoodVars
+Health.SetAsInvulnerable(QuestManager.HeroEntity, false)
+something = SoundTools.PlayMusic("MUSIC_QC010_ROSE_SHOT")
+
+
+
+
+ScriptFunction. -- See miscfunctions.lua, it contains a ton of ScriptFunction.
+UnlockChest
+DetachCamera -- Can't reattach
+SpawnDemonDoor -- Crashes, maybe because of wrong args.
+DespawnDemonDoor
+DrawHeroCircle  -- Nothing, but haven't put in a coroutine
+DebugPutVillageInLimbo
+BreakdownScriptedNPCSNearPlayer
+StepOneCutscene
+HeroTortureCollarOn -- and Off
+TurnOnCoachDriversAndShipCaptainsInLevel
+CreateDog
+DebugMoveToLimbo
+SaySimLine(ent, "TEXT_QUEST_QC010_MURGO_APPROACH_10") -- entity, voice line filename. Voice line filename be seen in the voice bnk csv, or extracted.
+SayLine
+ScriptFunction.PostGuildSealMessage("TEXT_QUEST_QC180_THERESA_EXIT_MANSION_GUILD_SEAL_10", true) -- This is meant to be used in a coroutine so expect an error after calling it.
+ScriptFunction.Impale(Debug.GetHero(), Targeting.GetTarget(Debug.GetHero())) -- Plays impale animation. I assume arg1 is impaler, arg2 is impaled.
+ScriptFunction.Ghost(Debug.GetHero(), .5) -- Entity, transparency, something, something, and something. Lua func, so dumpable.
+
+
+GUI.
+ShowMenuBox
+ShowCreditsScreen
+PlaySound
+DisplayHeadlineText
+ToggleElement
+SetGUIText
+DisplayGolfSwingMeter -- Probably requires args i don't have
+AddHealthBar
+DisplayShopScreen
+DisplayCrimeScreen
+RemoveDisplayBox
+DisplayButtonBox
+DisplayMenuBox
+DisplayFastTravelScreen
+GUI.AskYesNoQuestion("some text", someTable) -- Pops up a window (that pauses the game) and returns true or false depending on A or B. Should be in a coroutine.
+GUI.SetCounter("ChildhoodGoldCounter", "TEXT_QUEST_QC010_GOLD_10", Gameflow.ChildhoodVars.Gold) -- ID (anything), Localized string (hopefully just sets to arg if not found), value
+
+Sound.
+PlayEvent(QuestManager.HeroEntity, "SE_CHILDHOOD_BIRD_POO_SPLAT", "") -- returns true... if successful?
+PlayEventAtPitch -- assume above with pitch arg?
+ReleaseAllLoopingSounds -- crashes childhood if no args
+StopSoundCategoryPlaying(so_caravan, "MURGO_CROWD", 3000) -- entity, assume sound id, maybe mute over time
+
+SoundTools.
+PlayMusic
+PlayMainMusic
+StopMusic
+StopMainMusic -- Works
+RestartMainMusic
+PlayMainAtmos
+PlayMusicAndAtmosForLevel
+PlayEventOnCamera
+PlayEventOnHero
+SetTrackVolume
+StopMainAtmos
+
+BaseObjects. -- A whole tonne of behaviours and minds, nothing else.
+
+Stats. -- IF NOT PASSED HERO, CRASHES
+DEBUG_SetAsCollectorsEdition -- Google it, function works. I passed it hero entity and true. Allows you to open that chest in the guild hall and more...
+IsCollectorsEdition -- ^
+GetFat
+ModifyFat -- Lets you change fatness, there actually seems to be no cap for a single frame... hehe
+GetHeight -- Need to figure out how to set it
+GetCombatMultiplier
+ModifyTan -- Doesn't seem to do anything, may require reload?
+SetAsBerserk -- Works, it seems to increase hero height too.
+AddDebugPubItems
+SetRegionPerceievedRenown
+ModifyRenown
+
+Faction.
+Several enemy/friend related things. Can we do something a little evil and set the faction of a friendly?
+
+Building. -- We can find buildings with GetEntityWithName("QC040_ObjectBuildingBSMarketTownhouseSmall", "building"). What limits are there? (040 is bulliesanddog in childhood). Can we search by type to get all buildings?
+GetListOfOccupants
+GetECType
+GetBuildingOwner
+-- A few other things related to ownership, business and occupants
+
+Door.
+SetOpen(door, bool, bool) -- First bool opens if both bools are true, not entirely sure what they are individually.
+IsAvailable
+SetToDisplayMessageIfLocked
+SetLocked
+IsKnockable
+SetCanBeKnocked
+Remove/AddOutlineForLineFiring
+SetOpenImmediately
+DisplayLockedMessage
+SetOpenForEntity
+
+SearchTools. -- Lets you search for entities (and components?). Very useful.
+---Example---
+-- FilterWithName can be replaced with alternatives (FilterWithScriptFilter most flexible).
+search = StartNewSearch(type) -- type doesn't seem to matter?
+SearchTools.FilterWithName("entnamehere", name) -- FilterWith...
+SearchTools.GetSearchResults(search) -- Returns table, first result is key 1.
+-------------
+FilterWithScriptFilter -- Second arg is a function that gets passed an entity, if this func returns true the entity is added, false does not add it.
+FilterWithObjectType
+FilterWithEC
+FilterWithName
+FilterIsNotEntity
+LoadSearchHandle
+
+
+-- GLOBAL FUNCTION: CreateEntityFromIDAt(id, recordname .. " - " .. i, pos)
+Creature. -- CRASHES IF WRONG ARGS
+Kill -- Requires two entities to run. Unclear why. Note that target to kill is first. Creature.Kill(Targeting.GetTarget(Debug.GetHero()), GetPlayerHero())
+GetSpawnPos
+GetECType
+RenderCreaturePlacerPoints -- Crashes without good args. Proper usage in combatdebug. Example: Debug.CreaturePlaceMeDo(creature_radius, search_radius)
+IsCreatureOfType
+InformPlayerOfNameChange
+SetAsUnconscious -- Works. Pass ent and bool.
+IsSkeletal
+GetSpawnEntity
+PlaceNear -- See DebugMenu.txt for usage
+SetPlayerDefinedName
+SetCanBeRenamed -- Self explanatory. Example: Creature.SetCanBeRenamed(Targeting.GetTarget(Debug.GetHero()), true)
+SetNameTag
+SetAsGhost
+Player.StartScriptControlMode(QuestManager.HeroEntity) -- Can be used to make hero do things.
+Player.StopScriptControlMode(QuestManager.HeroEntity) 
+
+
+GuildMessages. -- Not too interesting actually. There's a ScriptFunction command that seems more promising
+
+EnvironmentTheme.
+BlendToEnvironmentTheme("EnvThemeChildhoodNight", 1, 0) -- Theme, intensity (0 disables), time to change. I wish I had a list of em, there's the environmentthemes gdb but I can't reverse that. I'll have to go through all quest scripts and find em.
+SetOverrideBlending(true)
+SetColourParameter("MAIN_LIGHT_COLOUR", 0, 0, 0) -- Alternatively -- "LIGHTMAP_COLOUR" / "AMBIENT_COLOUR" / Probably more
+
+
+GDB. -- Finding everything in the GDB would be great, but I can't reverse the GDB file so it's basically impossible to find what i'd be looking for without already knowing what it is.
+GetRecord
+RecordExists
+RecordExistsInGlobalDatabase
+
+
+Carrying. -- Some of these exist in utils.lua. 
+          -- Contains lots of funcs that get things that're being carried, including things the hero is holding. (See onactionusepullpint.lua for an actual application)
+------Example------
+local jug = Debug.CreateEntityAt("ObjectFurnitureDynamicPitcher", "Pitcher", CVector3(0, 0, 0))
+Carrying.PutEntityInSlot(GetPlayerHero(), DummyObjects.HAND_RIGHT, jug)
+--later:
+Carrying.RemoveEntityFromSlot(GetPlayerHero(), DummyObjects.HAND_RIGHT)
+-------------------
+
+
+Navigation. -- Unsurprisingly, lots of AI navigation things... applicable to hero entity too?
+SetSpeed
+FleeFromEntity
+IsWaterDeeperThan
+IsWaterTooDeepToWalk
+Wander
+Flee
+MoveToPosition
+SetCanUseWater
+GetNavigablePointWithinRadiusOfPoint
+HasArrived
+ToggleDrawFailedNav -- Works
+
+NavigatorControl. -- Only a few keys, mostly about turning.
+----TurnToFaceDirection----
+local rose_facing = murgo_pos - self.Entity:GetPosition()
+rose_facing:Normalise()
+NavigatorControl.TurnToFaceDirection(self.Entity, rose_facing)
+---------------------------
+
+
+Follow.
+FollowEntity(ent, Debug.GetHero(), 3) -- Unsure what int is. Seemingly not speed. Maybe nav update time?
+StopFollowing(ent)
+GetNumberOfFollowers
+GetListOfFollowers
+SetCanFollow
+IsFollowingFromFear
+SetAsFollowingFromFear
+GetRadius
+
+
+ManagedLocations. -- Different from LocationManager.
+GetFacingDirForLocation
+GetEntityOccupyingLocationOnObject -- try murgos thingy
+GetLocation
+GetPositionForLocation
+GetLocationOccupiedByEntity
+GetUnoccupiedLocation
+  location = ManagedLocations.GetUnoccupiedLocation(building, ELocationType.ELS_BABY_COT_POSITION)
+GetAttachedEntityAssociatedWithLocation
+
+
+SleepFunction.
+WaitUntilTime
+Sleep
+AdjustWorld
+DoBonusStuff
+
+
+Weather. -- Wind speed stuff???
+
+Combat. -- A lot of entity combat functions
+SetFlourishChargeTime
+SetDogMaulDamage
+SetMaxBlockDistance
+SetDamageMultiplier
+SetIsAttacking
+
+
+Multiplayer.
+DisplayCoopScreen -- Spawns henchman, can't figure this one out.
+SetHenchmanHiddenMode -- Makes henchman invisible if true.
+IsLocalCoopGame -- False by default I guess
+SetHenchmanGhostMode -- Makes henchman slightly transparent. probably used during cutscenes.
+
+PlayerWebsiteUnlocks.
+IsItemUnlocked
+  PlayerWebsiteUnlocks.IsItemUnlocked(GetPlayerHero(), "ObjectClothingCoatMascotM")
+    -- Note: Check generictriggers.lua for SpecialChest which I believe is the one in the guild cave.
+
+Swimming.
+IsDryingOff
+GetdryingOffTime
+SetDryingOff
+IsSwimming
+IsSwimmingUnderwater
+GetOxygenAmount
+
+Clock. -- err not much...
+
+GetGameMode() -- returns 1, at least with henchman
+
+FastTravel.
+Coach/Ship related things
+
+Balverine.
+GetLastPerch
+IsPerched
+
+Layers.
+Reset/Activate/DeactivateLayer
+IsLayerActive
+ActivateScenario
+
+Fire.
+SetEntityBurning -- Sets entity on fire
+SetEntityCooling
+SetEntityBurnDuration -- Seems to work
+SetEntitySmoking -- Hmm
+
+Electrify. -- Lame
+IsEntityElectrifyOn
+
+Inventory. -- Lots of inventory things. If you want to add something, this is where to look.
+AddItemOfType(GetPlayerHero(), "ObjectInventoryGoldBag_Online")
+
+ModeManager. -- Entity mode stuff, whatever that means.
+
+ResetPermanentsTables() -- Probably wipes saves or something.
+
+Perception. -- Entity awareness with sound/sight/memory stuff. Pretty cool.
+
+StartPubGame() -- Probably need the right args, otherwise crashes.
+
+Villager. -- A bunch of crime related things and other villager things
+SetIsACrimeToKill
+IsRich
+ForgiveHerosCrimes
+IsGuard
+GetEmployer/Parents/Children/Home
+
+
+Beetle. -- Some beetle things, nothing too cool.
+
+Physics.
+GetVelocity
+SetVelocity
+PrintStats
+SetCanCollideWithEntity
+TeleportToPosition
+SetIgnoresGravity -- Can use this with corpses? Could be funny.
+IsMoving
+SetCanBePushedByPlayer
+SetFacingVector(ent, vec) -- Sets rotation. Entity, CVector3. The vector is local position to face, so (1,0,0 should be facing forward, -1,0,0 is backwards), ( 0,1,0 is right and 0,-1,0 is left). 0,0,x (up) does not seem to effect it.
+
+Money. -- $$$
+Set
+Get
+Modify
+
+Mana. -- Game doesn't have mana :o
+GetMax
+Get
+SetMax
+Modify
+
+APLHelper. -- 0 clue at all lol
+GetNearestSuitableMarkers
+
+Targeting.
+ClearTarget
+GetInAiming
+GetTarget -- pretty sure this is the one that you can pass the hero entity to get hero target
+SetTarget -- Not sure how to use this
+
+Targeted. -- Some things that lets and gets the hero target an entity
+
+XboxLive.
+UnlockAchievement
+DisplaySessionDebug -- nothing it seems
+UploadPictureDebug -- ^
+
+Stats. -- lots of tracked stats
+DebugOutputStats -- nothing
+WriteStat
+
+Chest. -- Chest opening/closing stuff
+GetNumberOfSilverKeysNeeded
+SnapToClosed
+IsOpen
+Unlock
+Open
+
+
+PlayerAbility.
+SetAbilityRecord -- ?
+
+CI32Vector2() -- self explanatory, though I'm not sure where you'd use this.
+
+Crate.GetGroup
+
+Bob. -- Bobbing I think
+
+Logging.
+LogEvent/LogAIBehaviourEvent
+
+Block. -- A bunch of block related things, like type of block, and last hit blocked
+
+Experience.
+Get
+Modify
+Drain
+SetCollectionMultiplier
+
+Light. -- Also has GetECType, we can search for lights.
+SetRange(lightEnt, range)
+SetIntensity(lightEnt, intensity)
+SetColour(lightEnt, r, g, b)
+SetAsActive(lightEnt, true/false) -- May crash with wrong entity
+
+Sprinting.IsSprinting -- That's it...
+
+Kynapse. -- some path finding functions
+
+ECScriptData.GetDataString() -- Crashes if not passed an ent. Returns a string but what? Hero entity returns empty string.
+
+Health. -- Probably don't work/crash if not passed an entity.
+GetFrameLastChanged() -- Probably requires ent. Returns last frame damaged/healed?
+SetCantDie
+SetRegeneration
+Modify
+ModifyOverTime
+IsInvulnerable
+SetInvulnerable
+SetMax
+Get
+GetBase
+SetEntityAsDamageableByEntity
+DoneDebugDraw
+GetDeltaSinceLastDebugDraw
+
+Look. -- A few look-related things. If you want your char to stare at the ground then maybe this would be good.
+LookAtPos() -- Crashes if not passed entity and CVector3 I think.
+
+Timing.
+Set/GetMoonPhase -- An int
+GetRealWorldMonth -- Works!?
+GetProgramFrame -- Counter keeps going while game is paused
+GetWorldFrame -- Counter does not continue while paused
+GetRealWorldHour -- Works pretty much
+GetTimeStep -- Not too sure. Returns a very small (double?). tick rate in seconds?
+Set/GetTimeOfDay -- int between... 0 and 1?
+SetTimeAsStopped -- Probably stops day cycle. Seems to return number of calls or something... but I didn't call this over 200 times.
+GetSecondsSince
+Set/GetWorldSecondsPerSecond -- Also sets time speed, much like Debug.SetPlayerSecondsPerSecond(). Debug func could just be a proxy. Cool for slowmo.
+Set/GetDaySpeed -- 1440 by default. Comes out to an hour a minute, I think.
+Wait -- I believe this pauses a coroutine.
+GetTickRate -- 15. Unfortunately there's no setter.
+FastForwardTimeOfDayTo -- Haven't tried outside of childhood.
+
+Decapitatable.
+Decapitate -- poggers. Works but doesn't kill entity. Pass target and hero.
+SetDecapitatable -- poggers. Overriden by above anyway, so doesn't matter unless you want non-scripted decapitations.
+IsDecapitated
+
+Mentalist. -- suicide hobbes
+ExtinguishFuse
+GoBoom
+IsLit
+LightFuse
+GetECType -- Could use this to figure out what the hell this is.
+
+Whereabouts.
+GetBuildingWeAreInsideOf() -- Works if passed ent that's in a building! Could probably just use SearchTools to get em all, but perhaps this is more elegant.
+
+Mood. -- Honestly not sure.
+FreeMoodState
+SetMoodState
+GetMood -- Returns an int but tbh can't tell, at least in childhood.
+
+SleepMenu.
+ShowSleepMenu -- Crashes with no args. Expects a reference to a bed. See SleepFunctions.lua.
+IsVisible -- Probably self explanatory
+
+SleepFunctions. -- See SleepFunctions.lua, not even gonna check this table.
+
+PlayerControl.
+SetTargetFacingDirection -- Haven't tried.
+SetControlDampingWeight -- Not even sure what this does.
+GetLastControlDirection -- Another input related function. Returns a CVector3 of the left stick pos in the last frame 
+
+PlayerProperties. -- Property as in buildings.
+-- Several functions for managing property and getting property-related stats.
+
+Switch. -- Switch as in lever? I think there's one in the temple of shadows.
+Use
+GetECType
+
+BonusContainer.
+GetECType
+ApplyBonusesToHero -- Probably bed related. Check sleep related lua file(s).
+
+Weapon.
+Is/MeleeWeapon/Crossbow/Pistol/Bow/Rifle/
+IsRangedWeapon
+
+EntityManager.E3BodgeReload()
+
+Eyes.
+SetEnabled -- Works. Pass an ent.
+GetLeft/RightEyePos
+GetECType -- Gets ents with eyes, therefor can pass to setenabled.
+
+Platform.
+Unknown
+Xbox360
+Win32
+
+Object.
+IsObjectOfType
+
+Banshee.
+
+Wisp.
+
+GraphicAppearance. -- Contains some rather interesting visual things.
+SetScale(GetPlayerHero(), 1) -- ent, scale
+GetScale
+SetAlpha
+SetTintColour
+SetHighlightColour
+SetAsDrawable(ent, bool)
+Get/SetFadedByCamera
+SetCameraAlpha -- ? Crashes if passed a float. Needs a reference to a camera? Or does it set the alpha of something only to the camera?
+SetAsAlwaysInView -- ? Prevents object alpha from changing?
+SetSaturationMask -- ? Crashes if passed a bool. Requires reference to ent or camera?
+DebugSetAsChanged -- ? 
+HasDummyObject(ent, dummyobject) -- Pretty sure a dummy object is a bone, or a point on an object. Check DummyObjects table for a few of em. Doesn't contain all as evident by usepullpint.
+GetNumDummyObjects
+GetDummyObjectPosition(self.ItemBeingUsed, "Prop.Action.Serve.Customer", 0) -- So i'm pretty sure it's ent, dummy object, unknown. Looks like you can either pass this a dummyobject from the table, or a string. Maybe the string var is used to search in the level for it.
+
+Age. -- Also contains things about "age group".
+GetAge
+SetAge
+SetAgeLimit
+
+Morph.
+SetPinkEye -- Can't see a different but it does seem to do something
+SetWillGlowAlpha -- ^
+AddRandomScar -- ^ I'm probably just not using them correctly 
+AddScar
+
+GraphicAppearanceMorph.
+SetRealTimeTextureMorphing() -- Ent, bool from what I remember.
+DebugReInitialiseGraphicAppearance
+SetCharacterRecord
+UpdateTextureMorphs
+
+
+ObjectAttachment.
+AddEntity -- parent ent, child ent. Could actually use this to move entites around.
+RemoveEntity
+IsEntityAttached
+IsEntityOfTypeAttached
+GetEntityAttachedToDummy
+KillAttachedParticles
+KillAttachedParticlesWithFadeOut
+
+LocationManager.
+
+
+Action. -- Actions, as in animations and such I assume.
+------------
+--Plays animation of child hero wiping head after bird... incident. Requires player entity to be child?
+local poo = {
+  Type = EScriptableAction.PLAY_ANIMATION,
+  Anim = "HeroReactsToPoo"
+}
+Action.SetCurrentAction(QuestManager.HeroEntity, poo)
+------------
