@@ -291,12 +291,32 @@ CompressCompileReplace.py ".\somescript.txt" "Xbox360\Fable 2\data\gamescripts_r
 You can also replace ".\somescript.txt" with %1 and pass your plaintext script to the batch, so you can modify a different script within the same bnk.
 
 ----------Using RunScript() and loadfile()----------
-One very simple thing I have yet to mention is the directory that these funcs use.
-I believe loadfile's path start in the \Data\ folder.
-Therefor to loadfile an external script within the \data\scripts folder you can do:
-loadfile("scripts\\myscript.txt") -- Take note of the double backslash, the first one is used as an escape character.
+There's a couple of very important things I have yet to mention. 
 
-RunScript()'s path is different from what I can tell, and starts in \data\scripts\ already, so RunScript("myscript.lua") will run \data\scripts\myscript.lua
+The first is that filepaths seem to be cached/indexed on start.
+This means that once you've started up the game, the file paths are set in stone until you restart the game. I imagine this is probably for performance reasons.
+This poses a minor problem. If you rename a file while the game is running you will not be able to RunScript/loadfile it, until you restart the game or rename it back.
+
+For example I have a.lua in the scripts folder and I start the game up.
+I then call loadfile("scripts/a.lua")() or RunScript("a.lua") and all is well and the script runs.
+Then I rename a.lua to b.lua.
+I call loadfile("scripts/b.lua") or RunScript("b.lua") and nothing happens even though I passed the path correctly.
+I then restart the game and call loadfile("scripts/b.lua")() or RunScript("b.lua") and the script runs successfully even though I changed NOTHING since closing the game.
+
+This is not a big deal, it just means you can't add new scripts or rename them while the game is running and expect to be able to call them.
+
+The second important thing to know is the working directories of loadfile and RunScript. (as in whether the root dir is \Fable 2\ or \Fable 2\data\ ).
+I believe loadfile's working directory is the \Data\ folder.
+Therefor to loadfile an external script within the \data\scripts folder you can do:
+loadfile("scripts/myscript.txt") -- Alternatively, use double backslashes, the first one is used as an escape character.
+
+RunScript()'s path seems functionally very different, so hold on.
+I believe RunScript is able to run any script in the /data/ and /data/scripts/ folders without having to specify which,
+probably because of the aforementioned indexing. It does not seem to index any folders within /data/scripts/ though, and I haven't tested any other folder outside of /script/.
+For example, I have a script called a.lua in the /data/ directory and call RunScript("a.lua"). The script runs without issue.
+I then move the script to /data/scripts/ and restart the game.
+I once again call RunScript("a.lua") and once again it works without issue even though the file is in a different directory.
+
 
 If you're struggling to write a call to RunScript or loadfile due to space you can put your script directly into the data or scripts folder and
 name the script a single character like so:
