@@ -1,5 +1,5 @@
 # Fable2Modding
-Scripts and information on modding Fable 2 for the Xbox 360, mostly the game's Lua implementation.
+Scripts and information on modding Fable 2 for the Xbox 360, by taking advantage of the game's Lua implementation.
 
 # Modding Guide.txt
 A relatively indepth guide to setting up a workflow for modding with Fable 2's Lua instances.
