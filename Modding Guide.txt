@@ -310,12 +310,16 @@ I believe loadfile's working directory is the \Data\ folder.
 Therefor to loadfile an external script within the \data\scripts folder you can do:
 loadfile("scripts/myscript.txt") -- Alternatively, use double backslashes, the first one is used as an escape character.
 
-RunScript()'s path seems functionally very different, so hold on.
-I believe RunScript is able to run any script in the /data/ and /data/scripts/ folders without having to specify which,
+RunScript()'s path seems a bit functionally different, so hold on. 
+	(This paragraph isn't too important, just know that loadfile() is more consistent and that you can sometimes pass RunScript a filename without a path)
+I believe RunScript is able to run any script that has been indexed in the /data/ and /data/scripts/ folders without having to specify which folder,
 probably because of the aforementioned indexing. It does not seem to index any folders within /data/scripts/ though, and I haven't tested any other folder outside of /script/.
 For example, I have a script called a.lua in the /data/ directory and call RunScript("a.lua"). The script runs without issue.
 I then move the script to /data/scripts/ and restart the game.
 I once again call RunScript("a.lua") and once again it works without issue even though the file is in a different directory.
+
+RunScript isn't limited to the files in /data/ and /data/scripts/ though, as you can still pass it the full path of a script outside of those two folders.
+
 
 
 If you're struggling to write a call to RunScript or loadfile due to space you can put your script directly into the data or scripts folder and
