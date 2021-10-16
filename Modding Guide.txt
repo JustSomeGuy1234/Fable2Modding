@@ -172,7 +172,8 @@ Like I said, you can create a batch file instead to automatically do this so you
 Also, be careful if you decompile the same file again. Make sure you delete the old output before decompiling it again otherwise you'll end up with the script repeating in the file.
 
 ----------Which script should I modify first?----------
-There is no specific file you have to modify to use loadfile() or RunScript() to start running external code.
+There is no specific file you have to modify to use loadfile() or RunScript() to start running external code. 
+	(I talk about loadfile and RunScript in the next chapter, sorry that this is slightly out of order)
 If you want your code to only be run once, check generalsetupscript.lua. This script contains the initialization of many other scripts.
 As far as I know, the Lua files specified in this script are only RunScript'd once, meaning anything within a specified script is run once.
 
