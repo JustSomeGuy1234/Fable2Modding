@@ -292,12 +292,16 @@ You can also replace ".\somescript.txt" with %1 and pass your plaintext script t
 
 ----------Using RunScript() and loadfile()----------
 One very simple thing I have yet to mention is the directory that these funcs use.
-Both functions paths start in the \Data\ folder.
-Therefor to Run/Load an external script within the \data\scripts folder you can do:
-RunScript("scripts\\myscript.txt") -- Take note of the double backslash, the first one is used as an escape character.
+I believe loadfile's path start in the \Data\ folder.
+Therefor to loadfile an external script within the \data\scripts folder you can do:
+loadfile("scripts\\myscript.txt") -- Take note of the double backslash, the first one is used as an escape character.
 
-If you're struggling to write a call to RunScript or loadfile due to space you can put your script directly into the data folder and name the script a single character like so:
-RunScript("a") -- Will run a script with the file name of "a" within the \data\ folder. 
+RunScript()'s path is different from what I can tell, and starts in \data\scripts\ already, so RunScript("myscript.lua") will run \data\scripts\myscript.lua
+
+If you're struggling to write a call to RunScript or loadfile due to space you can put your script directly into the data or scripts folder and
+name the script a single character like so:
+RunScript("a") -- Will run a script with the file name of "a" within the \data\scripts folder.
+loadfile("a") -- Will load a script with the file name of "a" within the \data\ folder.
 This external script called "a" does not require a .lua or .txt file extension, in fact it does not require a file extension at all.
 
 Also, external scripts are not required to be pre-compiled. They can be plaintext as RunScript/loadfile automatically compiles them into chunks.
@@ -306,7 +310,7 @@ Another thing to know is that RunScript and loadfile do not return or cause erro
 Instead, if they do not find the file they will return a string with the contents of whatever you pass it... for some reason.
 If you want to do error checking you can do:
 -----
-if type(RunScript("scripts\\somescript")) == "string" then
+if type(RunScript("somescript.lua")) == "string" then
   -- Script was not found, or failed to be compiled or something
   blah blah blah
 end
