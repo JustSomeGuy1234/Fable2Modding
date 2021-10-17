@@ -51,7 +51,7 @@ You will NOT be able to play the wav files immediately.
 
 This is because they're encoded in Microsoft's proprietary xma format.
 
-To decode them you will need an application called xmaencode.exe
+To decode them you will need an application called xmaencode.exe (NOT xWMAencode.exe. That is different)
 
 I cannot provide this file legally as it's from the 360's XDK software. I also cannot provide the XDK software.
 
