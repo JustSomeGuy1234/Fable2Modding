@@ -31,6 +31,10 @@ A huge, messy list of all the interesting functions and tables I found that are 
 # Fable2 Speech bnk.bms
 A modified version of AlphaTwentyThree's wav scanner script for QuickBMS that extracts wav files, made to extract voice lines from speech.bnk.
 
+REQUIRES: xmaencode.exe
+
+REQUIRES: QuickBMS
+
 ### VERY IMPORTANT:
 To use, create a new folder and name it anything, this folder will contain all extracted voice lines as well as the following.
 
