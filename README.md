@@ -25,6 +25,9 @@ REQUIRES: Python 3.6 or something, I can't remember what I wrote the script in a
 A bad QuickBMS script I wrote that extracts files from most bnk archives, except the big ones.
 The input (bnk) file to extract from MUST be in the same directory as the output folder. Sorry 'bout that.
 
+# Functions and Tables I found.txt
+A huge, messy list of all the interesting functions and tables I found that are accessable from the global environment.
+
 # Fable2 Speech bnk.bms
 A modified version of AlphaTwentyThree's wav scanner script for QuickBMS that extracts wav files, made to extract voice lines from speech.bnk.
 
@@ -69,11 +72,3 @@ This is intentional as I have no experience with cmd and I can't figure out how 
 Once it's done you can enter *.wav.wav into the search bar at the top right of file explorer and it will show every converted, ready-to-use wav file.
 
   (I can't remember how I removed all of the .wav.wav extensions afterwards automatically, but it doesn't matter functionally)
-
-# Functions and Tables I found.txt
-A huge, messy list of all the interesting functions and tables I found that are accessable from the global environment.
-
-
-
-
-
