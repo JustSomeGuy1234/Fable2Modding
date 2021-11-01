@@ -7,6 +7,10 @@
 --        ToggleFreeCam
 --        SetDrawDebugPage
 -- Means that ToggleFreeCam and SetDrawDebugPage are both within the Debug table, and can be called with Debug.ToggleFreeCam() and Debug.SetDrawDebugPage()
+-- Another thing is that backslashes indicate that i've basically abbreviated two or more functions into one.
+-- For example:
+-- Remove/AddOutlineForLineFiring means RemoveOutlineForLineFiring AND AddOutlineForLineFiring exist
+-- Use your common sense to decypher what I've written
 
 -- I do not know what every single one of these functions do, though the majority of them are self explanatory such as Debug.ToggleFreeCam()
 -- If you find a function and you don't know how to use it or what it does, try and find it within one of the game's Lua scripts. 
