@@ -1,6 +1,12 @@
 -- List of Fable 2 Lua table/functions compiled by Just Some Guy - https://github.com/JustSomeGuy1234/
 -- This is NOT every single function/table, only the ones that I found interesting out of those that I found.
 -- "TableName." means it's a table. If there's no . after a line it means it's most very likely a function.
+-- Functions below a table indicate that they're within the previously specified table.
+-- For example:
+--        Debug. 
+--        ToggleFreeCam
+--        SetDrawDebugPage
+-- Means that ToggleFreeCam and SetDrawDebugPage are both within the Debug table, and can be called with Debug.ToggleFreeCam() and Debug.SetDrawDebugPage()
 
 -- I do not know what every single one of these functions do, though the majority of them are self explanatory such as Debug.ToggleFreeCam()
 -- If you find a function and you don't know how to use it or what it does, try and find it within one of the game's Lua scripts. 
@@ -71,7 +77,6 @@ SetDrawEntityBoundingSpheres -- doesn't work
 SetDrawBehaviourNames -- relatively boring
 SetOverheadNarratorDrawn -- ?
 ReloadShaderBank -- something i don't care about
-
 SetPlayerSecondsPerSecond -- Literally speeds the game up. Don't go too fast.
 SetStrafeDebugDraw
 SetDrawCombatMulitplier -- nope
@@ -98,7 +103,6 @@ EnterDivingMode -- If called on land, character jerks forward an inch.
 IsInDarkArea -- Should be self explanatory but I can't tell how dark it has to be, or if certain maps count as dark.
 HasPlayerMode
 
-GUI.PlayLocalisedMovieWithGenderedVoice("NewBeginnings.bik") -- Plays the bik file, pretty simple.
 
 misc
 SoundTools.SetMusicAndAtmosToStartOnNextLevelLoad(false)
@@ -128,7 +132,6 @@ ScriptFunction.PostGuildSealMessage("TEXT_QUEST_QC180_THERESA_EXIT_MANSION_GUILD
 ScriptFunction.Impale(Debug.GetHero(), Targeting.GetTarget(Debug.GetHero())) -- Plays impale animation. I assume arg1 is impaler, arg2 is impaled.
 ScriptFunction.Ghost(Debug.GetHero(), .5) -- Entity, transparency, something, something, and something. Lua func, so dumpable.
 
-
 GUI.
 ShowMenuBox
 ShowCreditsScreen
@@ -146,6 +149,7 @@ DisplayMenuBox
 DisplayFastTravelScreen
 GUI.AskYesNoQuestion("some text", someTable) -- Pops up a window (that pauses the game) and returns true or false depending on A or B. Should be in a coroutine.
 GUI.SetCounter("ChildhoodGoldCounter", "TEXT_QUEST_QC010_GOLD_10", Gameflow.ChildhoodVars.Gold) -- ID (anything), Localized string (hopefully just sets to arg if not found), value
+GUI.PlayLocalisedMovieWithGenderedVoice("NewBeginnings.bik") -- Plays the bik file, pretty simple.
 
 Sound.
 PlayEvent(QuestManager.HeroEntity, "SE_CHILDHOOD_BIRD_POO_SPLAT", "") -- returns true... if successful?
