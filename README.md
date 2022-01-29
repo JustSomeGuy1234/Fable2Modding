@@ -4,8 +4,6 @@ Scripts and information on modding Fable 2 for the Xbox 360, by taking advantage
 # Modding Guide.txt
 A relatively indepth guide to setting up a workflow for modding with Fable 2's Lua instances.
 
-"I don't wanna read all that!" or "I don't understand any of this!"
-
 I might make a quickstart guide at some point, because getting set up if you know what you're doing only takes a few minutes. The majority of the main guide explains the situations you'll be in when you start, and how to solve any issues that arise but if you're impatient or feel that you're in over your head you probably won't make it a third of the way through the full one. It's quite a lot simpler than the guide makes out, probably because i'm bad at writing.
 
 # CompileCompressReplace.py
@@ -24,6 +22,23 @@ REQUIRES: Python 3.6 or something, I can't remember what I wrote the script in a
 # Fable2 bnk.bms
 A bad QuickBMS script I wrote that extracts files from most bnk archives, except the big ones.
 The input (bnk) file to extract from MUST be in the same directory as the output folder. Sorry 'bout that.
+
+# RuntimeScriptLoader.lua
+A Lua script that runs external scripts on command during runtime.
+
+To use, put it in the scripts folder, then get this script loaded by adding a RunScript call to an internal bnk script.
+
+Make another script in the scripts folder and pass it's filename to the RunScript call in RuntimeScriptLoader
+
+In the new script, add the following lines:
+
+>myTestTable.newChecksum = 0  
+>function myTestTable.CodeToRun()  
+>--  Code here  
+>end  
+
+You can write whatever you want to run at runtime within the CodeToRun function. Do not write anything outside of the CodeToRun function, except the checksum line.  
+Whenever you want CodeToRun to be called, simply change the newChecksum value to something else.
 
 # Functions and Tables I found.txt
 A huge, messy list of all the interesting functions and tables I found that are accessable from the global environment.
