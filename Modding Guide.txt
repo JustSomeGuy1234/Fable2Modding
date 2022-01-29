@@ -368,52 +368,9 @@ Debug.ToggleFreeCam() -- Toggles freecam.
 
 If you want to find functions and tables for yourself, here's a function I created that displays all keys in a table.
 
----------------------------------------------------
-myTestTable = {}
-myTestTable.DisplayAllKeys = function(someTable, val) -- table to print, bool for whether to print key or values. Intended to print keys.
-	local howManyKeys = 0
-	myTestTable.tmpstr = ""
-	for k,v in pairs(someTable) do
-		local resultStr = ""
-		if val then
-			resultStr = tostring(v)
-		else
-			resultStr = tostring(k)
-		end
-		myTestTable.tmpstr = myTestTable.tmpstr .. "\n" .. resultStr
-		howManyKeys = howManyKeys+1
-	end
-	if howManyKeys < 1 then
-		GUI.DisplayMessageBox("Table had no keys!")
-		return
-	end
-	
-	-- Add all keys to a string, seperated by new lines
-	myTestTable.strTable = {}
+https://github.com/JustSomeGuy1234/Fable2Modding/blob/main/TableLogger.lua
 
-	for s in myTestTable.tmpstr:gmatch("[^\r\n]+") do
-    	table.insert(myTestTable.strTable, s)
-	end
-	
-	-- Print 12 lines of a table's keys at a time
-	myTestTable.strBundle = ""
-	myI = 0
-	for i = 1, #myTestTable.strTable do
-		myI = i
-		if i % 12 == 0 then
-			GUI.DisplayMessageBox(myTestTable.strBundle .. "\nPage " .. tostring(i/12) .. " of " .. tostring(#myTestTable.strTable/12))
-			myTestTable.strBundle = ""
-		end
-		myTestTable.strBundle = myTestTable.strBundle .. tostring(myTestTable.strTable[i]) .. "\n"
-	end
-	if myI % 12 ~= 0 then
-		GUI.DisplayMessageBox(myTestTable.strBundle)
-		myTestTable.strBundle = ""
-		myI = 0
-	end
-end
----------------------------------------------------
-Pass the above function a table and the game will show 12 keys of a table at a time. Warning, there can be tens of pages of keys in a table.
+Pass the above function a table and the game will show 12 keys of a table at a time. There can be tens of pages of keys in a table.
 Pass it a table and true, and it will display all values instead of keys. (not very useful imo)
 Replace the calls to DisplayMessageBox with print() and the script can be used in a normal Lua interpreter, though at that point you'll probably want to use io.
 
