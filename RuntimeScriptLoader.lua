@@ -1,9 +1,9 @@
 -- By github.com/JustSomeGuy1234
 -- Just Some Guy#8131 on Discord.
 
--- This script essentially reads and runs a specific external lua file every tick.
+-- This script essentially reads and runs a specific external lua file every x number of ticks. (Currently every couple of seconds)
 -- When the external script gets run, it assigns an int to a global variable called myTestTable.curChecksum
--- This script then checks to see if curChecksum has changed. 
+-- This script then checks to see if curChecksum has changed since the last time it ran the external script. 
 -- If it has, this script knows the external script has changed and so it calls a specific function within the external script.
 -- This specific function contains code that we can control, as it's in an external file.
 -- We also have manual control over curChecksum in the external script.
