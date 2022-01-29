@@ -357,41 +357,8 @@ It's a pretty rudimentary system but it works.
 Didn't explain it well enough? Here's the coroutine in an external script I name c.lua.
 This script is RunScript()'d by a modified internal script once.
 
----------------------------------------------------
-if myTestTable ~= nil then
-  GUI.DisplayMessageBox("Not the first time c.lua has run!")
-end
-myTestTable = {}
-myTestTable.curChecksum = 0
-myTestTable.newChecksum = 0
-myTestTable.Update = function()
-  myTestTable.tickCounter = 0
-  GUI.DisplayMessageBox("c initialized")
-  myTestTable.lastResult = false
-  myTestTable.lastReason = ""
-  myTestTable.logString = ""
-  while true do
-    while true do
-      Debug.Draw3DText(Debug.GetHero():GetPosition() + CVector3(0, -2, 2), myTestTable.logString)
-      myTestTable.tickCounter = myTestTable.tickCounter + 1
-      -- If a couple of seconds have passed, reset counter and run ext. script
-      if myTestTable.tickCounter > 32 then
-        myTestTable.tickCounter = 0
-        RunScript("myscripts/test.lua") -- Keep in mind that while the entire script is run, not all the code is called
-                                        -- as some of it is in a function that is not called until the checksum (which I have control external over) has changed.
-        if myTestTable.curChecksum ~= myTestTable.newChecksum then
-          myTestTable.curChecksum = myTestTable.newChecksum
-          myTestTable.lastResult, myTestTable.lastReason = pcall(myTestTable.CodeToRun) -- Note the pcall. If our external script causes an error it will kill this coroutine.
-          myTestTable.logString = tostring(myTestTable.lastResult) .. "\n" .. tostring(myTestTable.lastReason)
-        end
-      end
-      coroutine.yield()
-    end
-  end
-end
--- GeneralScriptManager.AddScript() creates a coroutine from the Update function within a given table, and coroutine.resume()'s it every game tick.
-GeneralScriptManager.AddScript(myTestTable) 
----------------------------------------------------
+https://github.com/JustSomeGuy1234/Fable2Modding/blob/main/RuntimeScriptLoader.lua
+
 
 ----------I can write code but what can I access?----------
 I have a huge list of all of the interesting tables and functions I've found. You can find it in this repository, though here's a link for the lazy: https://github.com/JustSomeGuy1234/Fable2Modding/blob/main/Functions%20and%20Tables%20I%20found.txt
