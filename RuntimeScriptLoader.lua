@@ -2,13 +2,13 @@
 -- Just Some Guy#8131 on Discord.
 
 -- This script essentially reads and runs a specific external lua file every x number of ticks. (Currently every couple of seconds)
--- When the external script gets run, it assigns an int to a global variable called myTestTable.curChecksum
--- This script then checks to see if curChecksum has changed since the last time it ran the external script. 
+-- When the external script gets run, it assigns an int to a global variable called myTestTable.newChecksum
+-- This script then checks to see if newChecksum has changed since the last time it ran the external script. 
 -- If it has, this script knows the external script has changed and so it calls a specific function within the external script.
 -- This specific function contains code that we can control, as it's in an external file.
--- We also have manual control over curChecksum in the external script.
+-- We also have manual control over newChecksum in the external script.
 
--- So basically, whenever we want to run the external script we just change the curChecksum value in it and this script executes our code that we can change at runtime.
+-- So basically, whenever we want to run the external script we just change the newChecksum value in it and this script executes our code that we can change at runtime.
 
 if myTestTable ~= nil then
   GUI.DisplayMessageBox("Not the first time RuntimeScriptLoader.lua has run!")
