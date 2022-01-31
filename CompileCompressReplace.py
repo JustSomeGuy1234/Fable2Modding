@@ -58,7 +58,7 @@ compiledPath = plaintextPath + ".compiled"
 luaCplusArgs = [LuaCPlusPath, "-s", "-o", compiledPath, plaintextPath]
 print("LUACPLUS ARGS:\n" + str(luaCplusArgs))
 input()
-subprocess.run(luaCplusArgs) # Why the fuck is this not working? Not enough quotes in args? fuck this shit man. fuck python. fuck its lack of debugging. fuck its local variable view that only shows up to 10 characters
+subprocess.run(luaCplusArgs)
 
 # Compress the file with zlib to create the final lua file
 compiledFile = io.open(compiledPath, 'br') # open the compiled lua file in binary read
@@ -115,7 +115,7 @@ tocOut = io.open(tocPath, "xb")
 tocOut.write(tocRead)
 tocOut.close()
 
-# So because the zip data is fucked, we have can't decompress it with zlib.decompress(). Quickbms also suffers this issue. Instead i'll just go the easy route and use offzip.
+# So because the zip data is messed up, we have can't decompress it with zlib.decompress(). Quickbms also suffers this issue. Instead i'll just go the easy route and use offzip.
 offzipArgs = [offzipPath, bnkPath + ".toc", bnkPath + ".tocDecomp"]
 subprocess.run(offzipArgs)
 os.remove(bnkPath + ".toc")
