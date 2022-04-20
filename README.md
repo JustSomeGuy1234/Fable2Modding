@@ -2,7 +2,7 @@
 Scripts and information on modding Fable 2 for the Xbox 360, by taking advantage of the game's Lua implementation.
 
 # Modding Guide.txt
-A relatively indepth guide to setting up a workflow for modding with Fable 2's Lua instances.
+An out of date (contains wrong info), relatively indepth guide to setting up a workflow for modding with Fable 2's Lua instances.
 
 I might make a quickstart guide at some point, because getting set up if you know what you're doing only takes a few minutes. The majority of the main guide explains the situations you'll be in when you start, and how to solve any issues that arise but if you're impatient or feel that you're in over your head you probably won't make it a third of the way through the full one. It's quite a lot simpler than the guide makes out, probably because i'm bad at writing.
 
@@ -18,6 +18,13 @@ REQUIRES: Offzip.exe (https://aluigi.altervista.org/mytoolz.htm#offzip)
 REQUIRES: LuaC.exe (Try and find it online, or compile the Lua source code).
 
 REQUIRES: Python 3.6 or something, I can't remember what I wrote the script in as I've been sitting on it for a couple of years.
+
+# DecompileAllLua.py 
+Decompiles all Lua files within a folder that has been extracted from one of Fable II's three script bnk files.  
+ONLY WORKS IF THE FILE STRUCTURE IS UNTOUCHED FROM EXTRACTION WITH MY QUICKBMS SCRIPT  
+If the file structure is not as it was when extracted by my QuickBMS script, it will not work as I do some messy stuff to sort the files.  
+
+REQUIRES: unluac.jar (https://sourceforge.net/projects/unluac/) to be in the same folder, and also Java to be accessable from the command line.
 
 # Fable2 bnk.bms
 A bad QuickBMS script I wrote that extracts files from most bnk archives, except the big ones.
