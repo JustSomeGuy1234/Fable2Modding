@@ -26,10 +26,6 @@ If the file structure is not as it was when extracted by my QuickBMS script, it 
 
 REQUIRES: unluac.jar (https://sourceforge.net/projects/unluac/) to be in the same folder, and also Java to be accessable from the command line.
 
-# Fable2 bnk.bms
-A bad QuickBMS script I wrote that extracts files from most bnk archives, except the big ones.
-The input (bnk) file to extract from MUST be in the same directory as the output folder. Sorry 'bout that.
-
 # RuntimeScriptLoader.lua
 A Lua script that runs external scripts on command during runtime.
 
