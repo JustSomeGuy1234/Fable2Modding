@@ -25,6 +25,7 @@
 
 Debug.
 ToggleFreeCam
+CreateEntityByHero -- Just takes an Entity name (E.g. "CreatureFaunaChicken" or "QC010_Theresa"). Entity names seem to be defined in GDB files.
 SetDrawDebugPage
 SetDebugMenuRequiresRightStickClick
 SetConsoleScale
