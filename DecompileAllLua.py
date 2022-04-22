@@ -68,6 +68,7 @@ for thisFile in allLuas:
 
 	# Finale
 	unluacArgs = "Java -jar ./unluac.jar " + '"' + thisFile + '"' + " > " + '"' + outFile + '"'
+	copyArgs = ['copy', thisFile, outFile]
 	print("CMD ARGS: " + unluacArgs)
 	result = os.system(unluacArgs)
 	if result != 0:
@@ -75,13 +76,13 @@ for thisFile in allLuas:
 		try:
 			os.remove(outFile)
 			missingFiles += thisFile + "\n"
-			copyResult = os.system("copy " + thisFile + " " + outFile)
+			copyResult = subprocess.call(copyArgs, shell=True)
 			if copyResult != 0:
 				print("And failed to copy it!")
 				missingFiles += "Failed copy & decompile: " + thisFile + "\n"
 		except OSError as err:
 			print("Failed to remove failed script: " + thisFile)
-			copyResult = os.system("copy " + thisFile + " " + outFile)
+			copyResult = subprocess.call(copyArgs, shell=True)
 			if copyResult != 0:
 				print("And failed to copy it!")
 				missingFiles += "Failed copy & decompile: " + thisFile + "\n"
