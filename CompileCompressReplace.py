@@ -57,7 +57,6 @@ compiledPath = plaintextPath + ".compiled"
 # Compile the file with LuaCPlus
 luaCplusArgs = [LuaCPlusPath, "-s", "-o", compiledPath, plaintextPath]
 print("LUACPLUS ARGS:\n" + str(luaCplusArgs))
-input()
 subprocess.run(luaCplusArgs)
 
 # Compress the file with zlib to create the final lua file
