@@ -4,6 +4,7 @@ import subprocess
 import io
 import glob
 
+missingFiles = "Files DecompileAllLua missed (but should have copied):\n"
 
 passedFolder = sys.argv[1]
 
@@ -12,12 +13,12 @@ allLuas = glob.glob(passedFolder + "/**/*.lua", recursive=True)
 for thisFile in allLuas:
 	print("In: " + thisFile)
 	
-	# Determine the bnk the scripts are from. Now that I think about it, I don't think this is actually necessary as sys.argv[1] starts at the /bnk script's/ path, and not the drive letter.
+	# Determine the bnk the scripts are from.
 	bnkName = ""
-	gs = "\\gamescripts\\scripts\\"
-	gsr = "\\gamescripts_r\\scripts\\"
-	guis = "\\guiscripts\\scripts\\"
-	guisa = "\\guiscripts\\art\\"
+	gs = "gamescripts\\scripts\\"
+	gsr = "gamescripts_r\\scripts\\"
+	guis = "guiscripts\\scripts\\"
+	guisa = "guiscripts\\art\\"
 
 	hasFoundBankName = False
 	if thisFile.find(gs) > -1:
@@ -43,6 +44,7 @@ for thisFile in allLuas:
 		input()
 		break
 	outFolder = thisFileFolder.replace(bnkName, bnkName + "\\decompiled\\")
+	outFolder = outFolder.replace("\\\\","\\")
 	outFile = outFolder+thisFileName
 	print("Out: " + outFile)
 
@@ -53,6 +55,7 @@ for thisFile in allLuas:
 		except OSError as err:
 			print("Msg: Failed to create output folder.")
 			print(err)
+			input()
 
 	# Make sure I didn't do something stupid and try and overwrite the original file
 	if outFile == thisFile:
@@ -60,13 +63,31 @@ for thisFile in allLuas:
 		input()
 		break
 
+
+	
+
 	# Finale
-	unluacArgs = "Java -jar ./unluac.jar " + '"' + thisFile + '"' + " >> " + '"' + outFile + '"'
+	unluacArgs = "Java -jar ./unluac.jar " + '"' + thisFile + '"' + " > " + '"' + outFile + '"'
 	print("CMD ARGS: " + unluacArgs)
 	result = os.system(unluacArgs)
-	if result == 1:
+	if result != 0:
 		print("unluac error. Probably because the script is already plaintext. Copying file.")
-		os.remove(outFile)
-		os.system("copy " + thisFile + " " + outFile)
+		try:
+			os.remove(outFile)
+			missingFiles += thisFile + "\n"
+			copyResult = os.system("copy " + thisFile + " " + outFile)
+			if copyResult != 0:
+				print("And failed to copy it!")
+				missingFiles += "Failed copy & decompile: " + thisFile + "\n"
+		except OSError as err:
+			print("Failed to remove failed script: " + thisFile)
+			copyResult = os.system("copy " + thisFile + " " + outFile)
+			if copyResult != 0:
+				print("And failed to copy it!")
+				missingFiles += "Failed copy & decompile: " + thisFile + "\n"
 
-input("\n\nFinished")
+
+if missingFiles == "Files DecompileAllLua missed (but should have copied):\n":
+	missingFiles = "\nDecompileAllLua missed no files c:"
+print(missingFiles)
+input("\nFinished")
