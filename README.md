@@ -2,7 +2,9 @@
 Scripts and information on modding Fable 2 for the Xbox 360, by taking advantage of the game's Lua implementation.
 
 # Modding Guide.txt
-An out of date (contains wrong info), relatively indepth guide to setting up a workflow for modding with Fable 2's Lua instances.
+An out of date (contains wrong info), relatively indepth guide to setting up a workflow for modding with Fable 2's Lua instances.   
+Watch this instead:  
+https://www.youtube.com/watch?v=Gvi9v9_c6KY
 
 I might make a quickstart guide at some point, because getting set up if you know what you're doing only takes a few minutes. The majority of the main guide explains the situations you'll be in when you start, and how to solve any issues that arise but if you're impatient or feel that you're in over your head you probably won't make it a third of the way through the full one. It's quite a lot simpler than the guide makes out, probably because i'm bad at writing.
 
