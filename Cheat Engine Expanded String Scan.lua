@@ -11,7 +11,11 @@ paste this in, change the string_to_scan string and outputfolder string, then pr
 --]]
 
 local string_to_scan = "ObjectInventory" -- Change this to the string you want scanning, e.g. ObjectInventory or Creature
-local outputfolder = "D:/" -- Change this to the directory that the scan will be written to. (e.g "C:/Users/You/Documents/Fable 2 text dump/")
+local outputfolder = "D:" -- Change this to the directory that the scan will be written to. (e.g "C:/Users/You/Documents/Fable 2 text dump/")
+local lastchar = string.sub(outputfolder, #outputfolder)
+if lastchar ~= "/" or "\\" then
+   outputfolder = outputfolder .. "/"
+end
 local finaloutfilepath = outputfolder .. string_to_scan .. ".txt" -- If you just want to specify the entire filepath yourself, replace this with a single string.
 local myFile = io.open(finaloutfilepath, "w")
 -- If all is left unchanged, the file will end up in D:/ObjectInventory.txt
