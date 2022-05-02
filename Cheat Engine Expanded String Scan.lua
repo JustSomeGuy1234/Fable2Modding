@@ -5,9 +5,12 @@ Just Some Guy#8131
 This script scans memory for every instance of given string (string_to_scan) and tries to get the rest of the string,
 then write all found strings to a file. Keep in mind it does not scan backwards. For example, if you scan for BobNPC
 it will find all 'BobNPC...'s but it won't get what was behind it, like '*NotActually*BobNPC'.
+
+To use this, open Cheat Engine, open the Memory View menu, Press Ctrl + L,
+paste this in, change the string_to_scan string and outputfolder string, then press execute.
 --]]
 
-local string_to_scan = "Theresa" -- Change this to the string you want scanning, e.g. ObjectInventory or Creature
+local string_to_scan = "ObjectInventory" -- Change this to the string you want scanning, e.g. ObjectInventory or Creature
 local outputfolder = "D:/" -- Change this to the directory that the scan will be written to. (e.g "C:/Users/You/Documents/Fable 2 text dump/")
 local finaloutfilepath = outputfolder .. string_to_scan .. ".txt" -- If you just want to specify the entire filepath yourself, replace this with a single string.
 local myFile = io.open(finaloutfilepath, "w")
