@@ -23,8 +23,8 @@ REQUIRES: Python 3.6 or something, I can't remember what I wrote the script in a
 
 # DecompileAllLua.py 
 Decompiles all Lua files within a folder that has been extracted from one of Fable II's three script bnk files.  
-ONLY WORKS IF THE FILE STRUCTURE IS UNTOUCHED FROM EXTRACTION WITH MY QUICKBMS SCRIPT  
-If the file structure is not as it was when extracted by my QuickBMS script, it will not work as I do some messy stuff to sort the files.  
+ONLY WORKS IF THE FILE STRUCTURE AND FOLDER NAMES ARE UNTOUCHED FROM EXTRACTION. ( e.g. \gamescripts\scripts\...)
+If the file structure or folder names are not as they were when extracted, the script will not work as it does some messy stuff to sort the files.
 
 REQUIRES: unluac.jar (https://sourceforge.net/projects/unluac/) to be in the same folder, and also Java to be accessable from the command line.
 
