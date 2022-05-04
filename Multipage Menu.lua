@@ -45,7 +45,7 @@
 			Because of this, you can iterate through the returned table with a numeric for-loop/ipairs and perform operations based on what the user chose.
 		Page Number:
 			The fourth arg is just the page number to start the menu at.
-			If you make this higher than math.ceil(number_of_entries / 5) there's a decent chance it'll break the menu.
+			If you make this higher than math.ceil(number_of_entries / 5) - 1 there's a decent chance it'll break the menu.
 --]]
 
 
