@@ -54,7 +54,7 @@ WispMenuCo = {
 	MenuEnum = {SPELL_SELECT = 1, FOLLOW_BEHAVIOUR = 2}, 
 	SpellEnum = { 
 					{ID = "INFERNO", Name = "Inferno"}, {ID = "SHOCK", Name = "Shock"}, {ID = "VORTEX", Name = "Vortex"}, {ID = "TIME_CONTROL", Name = "Time Control"}, 
-					{ID = "BLADES", Name = "Blades"}, {ID = "CHAOS", Name = "Chaos"}, {ID = "FORCE_PUSH", Name = "Force Push"}, {ID = "RAISE_DEAD", Name = "Raise Dead"} 
+					{ID = "BLADES", Name = "Blades"}, {ID = "CHAOS", Name = "Chaos"}, {ID = "FORCE_PUSH", Name = "Force Push"}, {ID = "RAISE_DEAD", Name = "Raise Dead"}
 				},
 	CurrentSpell = 1
 }
@@ -101,6 +101,7 @@ function WispMenuCo:DoStuff()
 		end
 	end
 	self.finished = true
+	GUI.DisplayMessageBox("Current spell is " .. (tostring(self.CurrentSpell) or "nil???"))
 end
 
 -- Define main menu
@@ -236,8 +237,10 @@ function WispMenuCo:ShowMenuBoxWithPages(title, entries, multi_select, page_numb
 			else
 				return final_entry_number - 1
 			end
-		elseif final_entry_number == 1 then -- User has pressed exit menu button (which should always be absolute first entry).
+		elseif final_entry_number == 1 and multi_select then -- User has pressed exit menu button (which should always be absolute first entry).
 			return multi_values
+		elseif final_entry_number == 1 and not multi_select then
+			return 0
 		end
 	end
 	-- In theory if we return a value, this will never be reached.
