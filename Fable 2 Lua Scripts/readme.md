@@ -18,7 +18,7 @@ Whenever you want CodeToRun to be called, simply change the newChecksum value to
 # MultipageMenu.lua
 My multipage custom menu system. It allows for the easy creation of things like mod configuration menus, or debug menus, etc.  
 Once loaded, the menu can be used by simply having a coroutine pass MultipageMenu.ShowMenuBoxWithPages() the title and a table of strings.  
-Information on how to implement it into your mod is in the non-example script.  
+Information on how to implement it into your mod is in the script.  
 
 # TableLogger.lua
 (May not work due to upcoming RuntimeScriptLoader refactor)
