@@ -1,8 +1,11 @@
 # Fable2Modding
-Scripts and information on modding Fable 2 for the Xbox 360, by taking advantage of the game's Lua implementation.
+This repository contains scripts and information on modding Fable 2 for the Xbox 360.  
+Most information, tools, and scripts are for modding the Lua engine which gives you tons of control over the game.  
+There's also a couple of things for other stuff.
 
 # Fable 2 Lua Scripts (folder)
-Contains useful Lua scripts and code that you can run ingame to do various things.
+Contains useful Lua scripts and code that you can run ingame to do various things.  
+Now contains RuntimeScriptLoader.
 
 # Modding Guide.txt
 An out of date (contains wrong info), relatively indepth guide to setting up a workflow for modding with Fable 2's Lua instances.   
