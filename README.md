@@ -45,8 +45,18 @@ In the new script, add the following lines:
 You can write whatever you want to run at runtime within the CodeToRun function. Do not write anything outside of the CodeToRun function, except the checksum line.  
 Whenever you want CodeToRun to be called, simply change the newChecksum value to something else.
 
+# Multipage Menu.lua
+A script for Fable 2 that shows off my multipage custom menu system, allowing for the creation of mod configuration menus, or debug menus, etc.  
+The script can be run as it is to show an example but it is meant to be integrated into your own scripts so it actually does something.  
+Information on how to implement it into your mod is in the script.
+
 # Functions and Tables I found.txt
 A huge, messy list of all the interesting functions and tables I found that are accessable from the global environment.
+
+# Cheat Engine Expanded String Scan.lua
+A script for Cheat Engine's Lua Engine.  
+It scans for all occurances of the given string in memory and tries to read the rest of each occurance, then writes all results to a file.  
+Basically if you search for ObjectInventory, everything starting with ObjectInventory in memory will be written to a file.
 
 # Fable2 Speech bnk.bms
 A modified version of AlphaTwentyThree's wav scanner script for QuickBMS that extracts wav files, made to extract voice lines from speech.bnk.
