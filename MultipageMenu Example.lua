@@ -1,7 +1,19 @@
 --[[
+	--- License & Credits ---
 	By https://github.com/JustSomeGuy1234/
 	Just Some Guy#8131
-	If you adapt this to your own mod, gimme some credit and leave a link to my Github somewhere visible on the mod download page or the page leading up to it.
+
+	If you use the Multipage System as a requirement of your own mod, you must leave a link to the above Github page so users can download it from there.
+	Avoid direct links to the script file itself on Github as I may rename it in the future, leading to a 404. A link to the above Github page would be best.
+	
+	You may redistribute this script or the code within ONLY if it is to fix bugs or expand upon existing functionality. 
+	You must accredit me on the page where the modified version of this script is redistributed.
+	A link to my Github page must also be provided.
+	
+	In any and all cases, this license must be provided alongside the distribution of the script/code.
+	If you must redistribute a compiled version this code (which removes all comments and therefor this license), copy this license into a seperate plaintext file which is downloaded alongside this script.
+	--- License & Credits ---
+
 
 	This is an example for my multi-page menu system for Fable II, which is meant to be adapted for use in mods.
 	The game's ShowMenuBox function only allows for 5 options which is really not enough when you want to do something other than let the user select an amount of time to sleep for.
