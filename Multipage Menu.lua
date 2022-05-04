@@ -3,25 +3,31 @@
 	Just Some Guy#8131
 	If you adapt this to your own mod, gimme some credit and leave a link to my Github somewhere visible on the mod download page or the page leading up to it.
 
-	This is my multi-page menu system for Fable II, meant to be adapted for use in other mods. Maybe it'll be a requirement for mods in the future, or it'll just be included.
+	This is an example for my multi-page menu system for Fable II, which is meant to be adapted for use in mods.
+	The game's ShowMenuBox function only allows for 5 options which is really not enough when you want to do something other than let the user select an amount of time to sleep for.
+	This system allows you to very easily spread a theoretically infinite amount of menu options over an infinite amount of pages.
+	Each "page" in the menu can be cycled through by pressing B.
+
 	Multi-page menus have 2 things the player must know before using them.
 	Firstly, the "Exit Menu" button is the first entry on the first page.
 	Secondly, B will not close the menu. Instead it will go to the next page.
-	There is no way to go back a page without cycling through however this is really not a problem if you categorize your menus properly and don't have too many entries on one menu.
-	You can cycle through several pages in a second by mashing B so even if you have tons of entries its not a big deal.
+	There is no way to go back a page without cycling through however this is really not a problem if you categorize your menus properly and don't have a ridiculous number of entries on one menu.
+	You can cycle through 3 pages per second so even if you have tons of entries its not a big deal to get back to the first page.
 
-	To learn how it works look at the DoStuff(), ShowMainMenu(), and ShowSpellSelectMenu() functions.
-	Basically, create a coroutine and have it pass ShowMenuBoxWithPages a title string and table of entries (see below), and the func will return an int.
-	The returned int will correspond to the entry in the table at that index.
+	To learn how you could use it look at the DoStuff(), ShowMainMenu(), and ShowSpellSelectMenu() functions (and Update() too, but that just runs the menu).
+	ShowMenuBoxWithPages is the real function that you should learn how to use. It's the main thing this script is based around. Everything else is just an example on how you could use it.
+	Basically to use the multipage menu, simply create a coroutine and have it pass ShowMenuBoxWithPages a title string and a table of entries (see example below).
+	After the user chooses an option the func will return an int.
+	The returned int will correspond to the entry in the table of entries at that index.
 	For example say you pass the following table of entries to the function:
-	{  "Toggle God Mode", "Toggle Free Cam", "Reload Level", "Delete Dog", "Spawn Dog", "Set Infinite Ammo", "Decapitate Target"  }
+	entry_table = {  "Toggle God Mode", "Toggle Free Cam", "Reload Level", "Delete Dog", "Spawn Dog", "Set Infinite Ammo", "Decapitate Target"  }
 	If the player chooses the Toggle God Mode entry, the function will return 1. If the player chooses Decapitate Target, the function will return 7.
+	If the user chooses the Leave Menu button, the function will return 0 so make sure you handle that appropriately if you need to.
 
-	Consider making a table that contains functions that do what the entries say, and have each functions key in the function table correspond to its key in the entry table.
-	That way you can do something like FunctionTable[returned_value]()
-	Or make a table containing tables of int IDs and their corresponding functions, then make a function that returns a function from a given int ID, like the GetSpellWithStringID function but reverse.
+	For the above example I'd make a table called DebugFunctionTable and add a function to it for each entry. I'd have each functions index in DebugFunctionTable correspond to its index in the entry table.
+	That way you can do something like DebugFunctionTable[returned_value]()
 
-	Entry Example:
+	ENTRY EXAMPLE:
 	Entries are what I've named the menu options that get passed to the game's DisplayMenuBox function (which you shouldn't call directly).
 	An entry can either be a simple string or a table containing a key named 'TextTag' and another called 'Enabled' (there may be more options).
 	TextTag is what is shown in the menu, and Enabled is whether the user can select it.
