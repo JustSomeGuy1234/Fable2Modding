@@ -3,7 +3,7 @@
 	Just Some Guy#8131
 	If you adapt this to your own mod, gimme some credit and leave a link to my Github somewhere visible on the mod download page or the page leading up to it.
 
-	This is my multi-page menu system for Fable II.
+	This is my multi-page menu system for Fable II, meant to be adapted for use in other mods. Maybe it'll be a requirement for mods in the future, or it'll just be included.
 	Multi-page menus have 2 things the player must know before using them.
 	Firstly, the "Exit Menu" button is the first entry on the first page.
 	Secondly, B will not close the menu. Instead it will go to the next page.
@@ -61,6 +61,7 @@ WispMenuCo = {
 
 
 function WispMenuCo:Update() -- Manager coroutine, pretty much just for debugging. You could delete this function and rename DoStuff() to Update().
+							 -- For the wisp, this will probably be the 'if looking at wisp, if hold lb, if pressed A' coroutine.
 	self.worked = true
 	self.whynot = "Hasn't failed yet?"
 	self.do_stuff = coroutine.create(self.DoStuff)
