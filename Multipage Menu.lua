@@ -58,6 +58,13 @@ WispMenuCo = {
 				},
 	CurrentSpell = 1
 }
+function WispMenuCo:GetSpellTag(spell_index)
+	if spell_index == self.CurrentSpell then
+		return "> " .. self.SpellEnum[spell_index].Name
+	else
+		return self.SpellEnum[spell_index].Name
+	end
+end
 
 
 function WispMenuCo:Update() -- Manager coroutine, pretty much just for debugging. You could delete this function and rename DoStuff() to Update().
@@ -76,7 +83,7 @@ function WispMenuCo:Update() -- Manager coroutine, pretty much just for debuggin
 			self.whynot = "Menu coroutine has been frozen. This may happen if ShowMenuBox/WithPages is passed the wrong args."
 		end
 
-		if not self.whynot == dead_co_error then
+		if self.whynot ~= dead_co_error then
 			GUI.DisplayMessageBox("Menu co failed! Reason:\n-------------\n" .. (self.whynot or "no reason given?"))
 		elseif self.whynot == dead_co_error and not self.finished then
 			GUI.DisplayMessageBox("Menu coroutine died before reaching the end. This shouldn't happen.")
