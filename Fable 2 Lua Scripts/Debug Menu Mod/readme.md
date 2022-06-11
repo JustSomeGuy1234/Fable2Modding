@@ -1,4 +1,9 @@
-# Debug menu mod scripts
+# Debug menu mod scripts  
+My Debug Menu Mod with lots of debuggy things.  
+
+## Savefile installation method
+Savefile installation is easy, just download and extract the zip to ``%userprofile%\Documents\Xenia\content\4D5307F1\00000001\``.  
+## Script installation method (advanced)
 Requires MultipageMenu to be installed and ``require``able. Creating a new folder in ``/scripts/`` called ``Quests`` and putting it in there should work.  
 Reminder that you must add all new files to the ``dir.manifest`` file in ``/data/``.
   
