@@ -32,7 +32,7 @@
 		If you or your users are playing on Goty/Platinum/v10.1, and there exists a dir.manifest file in /data/, you must open it and add a path to the script relative to the data folder.
 			e.g. scripts\quests\MultipageMenu.lua
 
-		Now simply run:
+		Now simply add to the start of your script:
 			require"MultipageMenu"
 		This will create a table called MultipageMenu in the global table and a function called ShowMenuBoxWithPages within it.
 		Read on for information on how to use MultipageMenu.ShowMenuBoxWithPages()
@@ -69,7 +69,7 @@
 		MultipageMenu.ShowMenuBoxWithPages("Menu Title", {  {TextTag = "Spell Select", Enabled = true}, "Just a string entry", {TextTag = "Unimplemented Menu", Enabled = false} })
 	Note that there are only two arguments used here. The second argument is a table containing multiple entries.
 
-	There are two more arguments you can pass to ShowMenuBoxWithPages that I have literally not tested yet.
+	There are three more arguments you can pass to ShowMenuBoxWithPages that I have basically not tested.
 	In theory:
 		MultiSelect Mode:
 			If you pass true as the third argument then MultiSelect mode is enabled.
@@ -81,13 +81,20 @@
 		Page Number:
 			The fourth arg is just the page number to start the menu at.
 			If you make this higher than math.ceil(number_of_entries / 5) - 1 there's a decent chance it'll break the menu.
+		Slow Mode:
+			There exists a bug where if you immediately reopen the menu after it closes, the item at the index that was hovered over when it closed will still be highlighted.
+			Enabling this prevents the issue by making the thread wait for the animation play out fully.
+			I've tried to fine-tune the timing and .45 seconds seems to be as good as it gets.
 --]]
 
 module((...), package.seeall)
 
 
--- Title of menu, every menu entry, (optional, untested:) whether the user can select multiple options which get returned in a table, (optional, untested:) optional page number to start the menu at (100% untested)
-function ShowMenuBoxWithPages(title, entries, multi_select, page_number)
+-- Title of menu, a table of every menu entry
+-- (optional, untested) whether the user can select multiple options which get returned in a table, 
+-- (optional) page number to start the menu at (useful for reopening the menu after the user selects something),
+-- (optional) wait for anim to finish to prevent highlight bug
+function ShowMenuBoxWithPages(title, entries, multi_select, page_number, slowmode)
 	if type(entries) ~= "table" then
 		GUI.DisplayMessageBox("Something tried to open a menu box with no/invalid entries!\nentries is of type: " .. type(entries))
 		return 0
@@ -147,7 +154,6 @@ function ShowMenuBoxWithPages(title, entries, multi_select, page_number)
 
 		-- LIFE IS PAIN. I HA-
 		-- DisplayMenuBox (the game's built-in func) is honestly terrible to use. If you don't pass it exactly what it wants, it will freeze the coroutine that called it in a 'normal' status without an error message.
-		-- I don't even know if the crashed coroutine is garbage-collected without nil'ing the reference in GeneralScriptManager. I guess we can maybe make the manager do that when it detects this scenario?
 
 		-- Oh and for SOME reason if you pass it a nil arg instead of nothing it crashes(?!?)
 		-- And so I create a table and add all entries to it, then "remove" invalid entries. There still needs to be consistency though, so I'll fill in any invalid entries with NONE.
@@ -178,6 +184,10 @@ function ShowMenuBoxWithPages(title, entries, multi_select, page_number)
 			title .. " | Page " .. tostring(page_number+1) .. " of " .. tostring(total_pages + 1),
 			unpack(page_entries) -- Returns each entry as a seperate arg.
 		)
+		
+		if slowmode then -- Fixes the white highlight bug that occurs when menu reopens before animation finishes
+			ScriptFunction.WaitForTimeInSeconds(.45)
+		end
 
 		-- entry_number is only 0-5, so multiply it by current page. Option 3 on page 4 should be entry number 18.
 		if entry_number ~= 0 then
@@ -191,12 +201,12 @@ function ShowMenuBoxWithPages(title, entries, multi_select, page_number)
 			if multi_select then
 				multi_values[#multi_values+1] = final_entry_number - 1 -- Remember, we nagate one because we added the menu entry.
 			else
-				return final_entry_number - 1
+				return final_entry_number - 1, page_number
 			end
 		elseif final_entry_number == 1 and multi_select then -- User has pressed exit menu button (which should always be absolute first entry).
-			return multi_values
+			return multi_values, 0
 		elseif final_entry_number == 1 and not multi_select then
-			return 0
+			return 0, 0
 		end
 	end
 	-- In theory if we return a value, this will never be reached.
@@ -226,8 +236,9 @@ function ShowMenuBox(...)
 		if menuposted then
 			LastMessageID_MenuBox = menumessage:GetID()
 			local extradata = menumessage:GetExtraDataAsNumber()
+			coroutine.yield()
 			return extradata
 		end
-		coroutine.yield() -- Literally the ONLY yield in this entire thing. This damn message system means we have to create a coroutine to use menus.
+		coroutine.yield()
 	end
 end
