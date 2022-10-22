@@ -40,11 +40,31 @@ end
 function GetRenderMenuEntries()
 	return {
 		NewActionEntry("Debug Draw Menu", true, OpenMenu, {"Debug Draw Menu", GetDebugDrawMenuEntries}),
+		NewActionEntry("Render Resolution Menu", true, OpenMenu, {"Render Resolution Menu", GetRenderResolutionMenuEntries}),
 		NewActionEntry("Static Entity Render Dist", true, Functions.SetStaticRendDist, nil),
 		NewActionEntry("Animated Entity Render Dist", true, Functions.SetAnimatedRendDist, nil),
 		NewActionEntry("Villager Render Dist", true, Functions.SetVillagerRendDist, nil),
 		NewActionEntry("Creature Render Dist", true, Functions.SetCreatureRendDist, nil),
 		NewActionEntry("Make Dog Invisible (Temporary)", true, Functions.FadeDog, nil)
+	}
+end
+function GetRenderResolutionMenuEntries()
+	return {
+		NewActionEntry("1120x720 1X", true, Debug.EngineTest.SetMainSceneRenderTargetDimensions, {1120,576,1}),
+		NewActionEntry("1120x720 2X (default?)", true, Debug.EngineTest.SetMainSceneRenderTargetDimensions, {1120,576,2}),
+		NewActionEntry("1120x720 4X", true, Debug.EngineTest.SetMainSceneRenderTargetDimensions, {1120,576,4}),
+		NewActionEntry("1280x720 1X", true, Debug.EngineTest.SetMainSceneRenderTargetDimensions, {1280,720,1}),
+		NewActionEntry("1280x720 2X", true, Debug.EngineTest.SetMainSceneRenderTargetDimensions, {1280,720,2}),
+		NewActionEntry("1120x640 2X", true, Debug.EngineTest.SetMainSceneRenderTargetDimensions, {1120,640,2}),
+		NewActionEntry("1120x576 2X", true, Debug.EngineTest.SetMainSceneRenderTargetDimensions, {1120,576,2}),
+		NewActionEntry("960x544 2X", true, Debug.EngineTest.SetMainSceneRenderTargetDimensions, {960,544,2}),
+		NewActionEntry("960x480 4X", true, Debug.EngineTest.SetMainSceneRenderTargetDimensions, {960,480,4}),
+		NewActionEntry("800x512 4X", true, Debug.EngineTest.SetMainSceneRenderTargetDimensions, {800,512,4}),
+		NewActionEntry("640x480 4X", true, Debug.EngineTest.SetMainSceneRenderTargetDimensions, {640,480,4}),
+		NewActionEntry("1920x1080 1X (broken)", true, Debug.EngineTest.SetMainSceneRenderTargetDimensions, {1920,1080,1}),
+		NewActionEntry("1920x1080 2X (broken)", true, Debug.EngineTest.SetMainSceneRenderTargetDimensions, {1920,1080,2})
+
+
 	}
 end
 function GetTimingMenuEntries()
@@ -154,6 +174,7 @@ function GetMiscMenuEntries()
 	return {
 		NewActionEntry("Become Adult/Child Menu", true, OpenMenu, {"Become Adult/Child", GetPlayerEntityMenuEntries}),
 		NewActionEntry("Become Side Character Menu", true, OpenMenu, {"Become A Side Character", GetCharacterRecordMenuEntries}),
+		NewActionEntry("Unlock Target Chest", Chest.IsAvailable(Debug.GetHeroTarget()), Functions.UnlockChest, nil),
 		NewActionEntry("Swap Gender", true, Functions.ChangeHeroGender, nil),
 		NewActionEntry("Enable Safety Button in Wheel", true, Player.SetSafetyModeSuggestable, {QuestManager.HeroEntity, true}),
 		NewActionEntry("Enable Quest/Map Menu", true, Player.SetMapScreenAsEnabled, {QuestManager.HeroEntity, true}),
@@ -373,10 +394,12 @@ end
 --[[																					CREATURES																					]]--
 function GetFriendlyNPCMenuEntries()
 	return {
+		NewActionEntry("Chicken", true, Debug.CreateEntityByHero, {"CreatureFaunaChicken", "TestChicken"}),
 		NewActionEntry("Theresa", true, Debug.CreateEntityByHero, {"QC010_Theresa", "TestTheresa"}),
 		NewActionEntry("Reaver", true, Debug.CreateEntityByHero, {"ReaverTemplate", "TestReaver"}),
 		NewActionEntry("Hammer", true, Debug.CreateEntityByHero, {"HammerOldTemplate", "TestHammer"}),
 		NewActionEntry("Garth", true, Debug.CreateEntityByHero, {"GarthTemplate", "TestGarth"}),
+		NewActionEntry("Lady Grey", true, Debug.CreateEntityByHero, {"QO570_ZombieBride", "TestLadyGrey"}),
 		NewActionEntry("Generic Villager", true, Debug.CreateEntityByHero, {"CreatureVillager", "TestVillager"}),
 		NewActionEntry("Games Master", true, Debug.CreateEntityByHero, {"CreatureVillagerTravellingGamesMaster", "TestVillager"}),
 	}
@@ -544,7 +567,6 @@ function GetPlayerEntityMenuEntries()
 		NewActionEntry("Child Female", true, Player.ChangePlayerEntityType, {QuestManager.HeroEntity, "CreatureHeroFemaleChild"}),
 		NewActionEntry("Enable Magic While Child", true, PlayerAbility.SetAbilityRecord, {QuestManager.HeroEntity, "PlayerAbilitiesOneButtonCombat"}),
 		NewActionEntry("Add Abilities Menu To DPad Once", true, Player.AddHUDSuggestionOfType, {QuestManager.HeroEntity, "HUDSuggestionLevelUp", "U", 500})
-
 	}
 end
 function GetCharacterRecordMenuEntries()
@@ -557,6 +579,12 @@ function GetCharacterRecordMenuEntries()
 		NewActionEntry("Become Monty", true, GraphicAppearanceMorph.SetCharacterRecord, {QuestManager.HeroEntity, "Monty"}),
 		NewActionEntry("Become Murgo", true, GraphicAppearanceMorph.SetCharacterRecord, {QuestManager.HeroEntity, "Murgo"}),
 		NewActionEntry("Become Murry", true, GraphicAppearanceMorph.SetCharacterRecord, {QuestManager.HeroEntity, "Murry"}),
-		NewActionEntry("Become Sam", true, GraphicAppearanceMorph.SetCharacterRecord, {QuestManager.HeroEntity, "Sam"})
+		NewActionEntry("Become Sam", true, GraphicAppearanceMorph.SetCharacterRecord, {QuestManager.HeroEntity, "Sam"}),
+		NewActionEntry("Female Henchman Good", true, Player.ChangePlayerEntityType, {QuestManager.HeroEntity, "CreatureHeroHenchmanFemaleGood"}),
+		NewActionEntry("Female Henchman Neutral", true, Player.ChangePlayerEntityType, {QuestManager.HeroEntity, "CreatureHeroHenchmanFemaleNeutral"}),
+		NewActionEntry("Female Henchman Evil", true, Player.ChangePlayerEntityType, {QuestManager.HeroEntity, "CreatureHeroHenchmanFemaleEvil"}),
+		NewActionEntry("Male Henchman Good", true, Player.ChangePlayerEntityType, {QuestManager.HeroEntity, "CreatureHeroHenchmanMaleGood"}),
+		NewActionEntry("Male Henchman Neutral", true, Player.ChangePlayerEntityType, {QuestManager.HeroEntity, "CreatureHeroHenchmanMaleNeutral"}),
+		NewActionEntry("Male Henchman Evil", true, Player.ChangePlayerEntityType, {QuestManager.HeroEntity, "CreatureHeroHenchmanMaleEvil"})
 	}
 end

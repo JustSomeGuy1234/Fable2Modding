@@ -282,6 +282,8 @@ function Functions.ChangeTargetOpinion(axis, amount)
 		OpinionReaction.SetAxisValue(target, EOpinionAxes.EOA_RESPECT, opinions.love)
 	end
 end
+
+-- Misc functions
 function Functions.ChangeHeroGender()
 	if Gender.Get(QuestManager.HeroEntity) == EGender.EG_MALE then
 	  Player.ChangePlayerEntityType(QuestManager.HeroEntity, "CreatureHeroFemale")
@@ -294,6 +296,14 @@ function Functions.ChangeHeroGender()
       Gender.SetHasHadSexChange(QuestManager.HeroEntity, true)
     end
 end
+function Functions.UnlockChest()
+	local hero_target = Debug.GetHeroTarget()
+	if hero_target and Chest.IsAvailable(hero_target) then
+		Chest.Unlock(hero_target)
+		Chest.SetToDisplayLockedMessage(hero_target, false)
+	end
+end
+
 -- Camera funcs
 function Functions.HideGUI()
 	ToHideGUI = true
