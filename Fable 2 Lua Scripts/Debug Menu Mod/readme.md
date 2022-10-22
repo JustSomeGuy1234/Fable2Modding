@@ -1,8 +1,17 @@
 # Debug menu mod scripts  
 My Debug Menu Mod with lots of debuggy things.  
 
+<b>ALL SAVES ARE GoTY/PLATINUM UNLESS SPECIFIED</b>
+
 ## Savefile installation method
 Savefile installation is easy, just download and extract the zip to ``%userprofile%\Documents\Xenia\content\4D5307F1\00000001\``.  
+
+## Updating the mod menu
+0. Go to ``/Fable 2/data/scripts/`` and create a new folder called ``DebugMenuMod``
+1. Download the new scripts and copy them both to ``Fable 2/data/scripts/DebugMenuMod/``.
+2. Open dir.manifest in ``/Fable 2/data/`` as a text file and add ``scripts\DebugMenuMod\MyDebugMenu.lua`` and ``scripts\DebugMenuMod\DebugMenuEntries.lua`` on new lines.
+3. Load into your save, go to the last page and click ``(DEBUG) Reload Menu``
+
 ## Script installation method (advanced)
 Requires MultipageMenu to be installed and ``require``able. Creating a new folder in ``/scripts/`` called ``Quests`` and putting it in there should work.  
 Reminder that you must add all new files to the ``dir.manifest`` file in ``/data/``.
