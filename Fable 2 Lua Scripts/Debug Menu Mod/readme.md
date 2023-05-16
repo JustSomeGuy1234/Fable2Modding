@@ -1,10 +1,10 @@
 # Debug menu mod scripts  
 My Debug Menu Mod with lots of debuggy things.  
 
-<b>ALL SAVES ARE GoTY/PLATINUM UNLESS SPECIFIED</b>
+<b>ALL SAVES ARE GoTY/PLATINUM (all DLC) UNLESS SPECIFIED</b>
 
 ## Savefile installation method
-Savefile installation is easy, just download and extract the zip to ``%userprofile%\Documents\Xenia\content\4D5307F1\00000001\``.  
+Savefile installation is easy, just download and extract the zip to ``Xenia\content\4D5307F1\00000001\``.  
 
 ## Updating the Debug Menu
 0. Create a new folder in ``Fable 2\data\scripts\`` and call it ``Quests``.
