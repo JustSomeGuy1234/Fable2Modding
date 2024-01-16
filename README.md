@@ -1,20 +1,23 @@
-# Fable2Modding
+# Most of this stuff is now redundant or out of date!
+With the release of [Archon's Toolbox](https://github.com/JustSomeGuy1234/Archons-Toolbox), the Lua modding process is now fully automated.
+There are still a couple of things in here that are convenient to have like the tables list and the cheat engine string scan but everything else is obsolete.
+## Fable2Modding
 This repository contains scripts and information on modding Fable 2 for the Xbox 360.  
 Most information, tools, and scripts are for modding the Lua engine which gives you tons of control over the game.  
 There's also a couple of things for other stuff.
 
-# Fable 2 Lua Scripts (folder)
+## Fable 2 Lua Scripts (folder)
 Contains useful Lua scripts and code that you can run ingame to do various things.  
 Now contains RuntimeScriptLoader.
 
-# Modding Guide.txt
+## Modding Guide.txt
 An out of date (contains wrong info), relatively indepth guide to setting up a workflow for modding with Fable 2's Lua instances.   
 Watch this instead:  
 https://www.youtube.com/watch?v=Gvi9v9_c6KY
 
 I might make a quickstart guide at some point, because getting set up if you know what you're doing only takes a few minutes. The majority of the main guide explains the situations you'll be in when you start, and how to solve any issues that arise but if you're impatient or feel that you're in over your head you probably won't make it a third of the way through the full one. It's quite a lot simpler than the guide makes out, probably because i'm bad at writing.
 
-# CompileCompressReplace.py
+## CompileCompressReplace.py
 Compiles and compresses your modified Lua script, then replaces the old version within the chosen bnk file.
 
 This script (and its requirements) is all you need to begin writing your own code and have it run in-game. Kind of. Read the guide.
@@ -27,7 +30,7 @@ REQUIRES: LuaC.exe (Try and find it online, or compile the Lua source code).
 
 REQUIRES: Python 3.6 or something, I can't remember what I wrote the script in as I've been sitting on it for a couple of years.
 
-# DecompileAllLua.py 
+## DecompileAllLua.py 
 Decompiles all Lua files within a folder that has been extracted from one of Fable II's three script bnk files.  
 ONLY WORKS IF THE FILE STRUCTURE AND FOLDER NAMES ARE UNTOUCHED FROM EXTRACTION. ( e.g. \gamescripts\scripts\...)
 If the file structure or folder names are not as they were when extracted, the script will not work as it does some messy stuff to sort the files.
@@ -36,15 +39,15 @@ REQUIRES: unluac.jar (https://sourceforge.net/projects/unluac/) to be in the sam
 
 
 
-# Functions and Tables I found.txt
+## Functions and Tables I found.txt
 A huge, messy list of all the interesting functions and tables I found that are accessable from the global environment.
 
-# Cheat Engine Expanded String Scan.lua
+## Cheat Engine Expanded String Scan.lua
 A script for Cheat Engine's Lua Engine.  
 It scans for all occurances of the given string in memory and tries to read the rest of each occurance, then writes all results to a file.  
 Basically if you search for ObjectInventory, everything starting with ObjectInventory in memory will be written to a file.
 
-# Fable2 Speech bnk.bms
+## Fable2 Speech bnk.bms
 A modified version of AlphaTwentyThree's wav scanner script for QuickBMS that extracts wav files, made to extract voice lines from speech.bnk.
 
 REQUIRES: xmaencode.exe
